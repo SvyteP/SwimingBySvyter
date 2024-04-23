@@ -1,13 +1,17 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
+import com.svyter.spring.swimingbysvyter.model.CustomersEditPass;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping("/customers")
 public class CustomersController {
     private CustomersService customersService;
@@ -17,7 +21,7 @@ public class CustomersController {
         this.customersService = customersService;
     }
     @PostMapping
-    public ResponseEntity<String> regCustomers(CustomersRegModel customersRegModel){
+    public ResponseEntity<String> regCustomers( @Valid CustomersRegModel customersRegModel){
         try {
             customersService.regCustomers(customersRegModel);
             return ResponseEntity.ok().body("Customers was registered");
@@ -49,10 +53,9 @@ public class CustomersController {
         }
     }
     @PutMapping("/pass")
-    public ResponseEntity<String> editPass(@RequestBody String email,
-                                               @RequestBody String pass){
+    public ResponseEntity<String> editPass(@Valid @RequestBody CustomersEditPass customersEditPass){
         try {
-            customersService.editPass(email,pass);
+            customersService.editPass(customersEditPass.getEmail(), customersEditPass.getPass());
             return ResponseEntity.ok().body("Pass was edited");
         }
         catch (Exception e){

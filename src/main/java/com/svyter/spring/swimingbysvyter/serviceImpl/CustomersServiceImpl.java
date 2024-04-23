@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
-import com.svyter.spring.swimingbysvyter.dto.CustomersDto;
+import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
@@ -9,18 +9,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomersServiceImpl implements CustomersService {
-    private CustomersDto customersDto;
+    private CustomersRepo customersRepo;
     @Autowired
-    public CustomersServiceImpl(CustomersDto customersDto) {
-        this.customersDto = customersDto;
+    public CustomersServiceImpl(CustomersRepo customersRepo) {
+        this.customersRepo = customersRepo;
     }
 
     @Override
     public void regCustomers(CustomersRegModel customersRegModel) {
         try {
-            Customers customers = new Customers(customersRegModel.getLogin(),customersRegModel.getPass(),
-                    customersRegModel.getEmail(), customersRegModel.isAdmin());
-            customersDto.save(customers);
+            Customers customers = new Customers();
+            customers.setEmail(customersRegModel.getEmail());
+            customers.setName(customersRegModel.getLogin());
+            customers.setPass(customersRegModel.getPass());
+            customers.setAdmin(customersRegModel.isAdmin());
+            customersRepo.save(customers);
         }
         catch (Exception e)
         {
@@ -31,8 +34,13 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void delCustomers(Long idForDel, Long idUser) {
         try {
-          Customers admin = customersDto.findById(idUser).orElseThrow();
-          customersDto.deleteById(idForDel);
+          Customers admin = customersRepo.findByIdAndAdminIsTrue(idUser);
+          if (admin.isAdmin()){
+              customersRepo.deleteById(idForDel);
+          }
+          else {
+              throw new RuntimeException("User is not admin!");
+          }
         }
         catch (Exception e)
         {
@@ -43,9 +51,9 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void editLogin(Long id, String login) {
         try {
-            Customers customers = customersDto.findById(id).orElseThrow();
+            Customers customers = customersRepo.findById(id).orElseThrow();
             customers.setName(login);
-            customersDto.save(customers);
+            customersRepo.save(customers);
         }
         catch (Exception e)
         {
@@ -56,9 +64,9 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void editPass(String email, String pass) {
         try {
-            Customers customers = customersDto.findByEmail(email);
+            Customers customers = customersRepo.findByEmail(email);
             customers.setPass(pass);
-            customersDto.save(customers);
+            customersRepo.save(customers);
         }
         catch (Exception e){
             throw new RuntimeException(e.getMessage());
