@@ -1,2 +1,3 @@
-package com.svyter.spring.swimingbysvyter.model;public class CustomersEditPass {
+package com.svyter.spring.swimingbysvyter.model;
+public class CustomersEditPass {
 }

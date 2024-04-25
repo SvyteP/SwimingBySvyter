@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
-import com.svyter.spring.swimingbysvyter.dto.CustomersDto;
+import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomersServiceImpl implements CustomersService {
-    private CustomersDto customersDto;
+    private CustomersRepo customersDto;
     @Autowired
-    public CustomersServiceImpl(CustomersDto customersDto) {
+    public CustomersServiceImpl(CustomersRepo customersDto) {
         this.customersDto = customersDto;
     }
 

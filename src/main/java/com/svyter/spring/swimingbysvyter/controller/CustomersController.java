@@ -5,9 +5,11 @@ import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping("/customers")
 public class CustomersController {
     private CustomersService customersService;
@@ -49,7 +51,7 @@ public class CustomersController {
         }
     }
     @PutMapping("/pass")
-    public ResponseEntity<String> editPass(@RequestBody String email,
+    public ResponseEntity<String> editPass( @Validated @RequestBody String email,
                                                @RequestBody String pass){
         try {
             customersService.editPass(email,pass);

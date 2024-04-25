@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomersDto extends CrudRepository<Customers,Long> {
+public interface CustomersRepo extends CrudRepository<Customers,Long> {
 
     Customers findByEmail(String email);
 }
