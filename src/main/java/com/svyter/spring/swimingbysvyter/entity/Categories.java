@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 
 @Data

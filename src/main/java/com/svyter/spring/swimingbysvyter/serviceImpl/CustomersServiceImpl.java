@@ -18,12 +18,17 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void regCustomers(CustomersRegModel customersRegModel) {
         try {
-            Customers customers = new Customers();
-            customers.setEmail(customersRegModel.getEmail());
-            customers.setName(customersRegModel.getLogin());
-            customers.setPass(customersRegModel.getPass());
-            customers.setAdmin(customersRegModel.isAdmin());
-            customersRepo.save(customers);
+            if (!customersRepo.existsAllByEmail(customersRegModel.getEmail())) {
+                Customers customers = new Customers();
+                customers.setEmail(customersRegModel.getEmail());
+                customers.setName(customersRegModel.getLogin());
+                customers.setPass(customersRegModel.getPass());
+                customers.setAdmin(customersRegModel.getAdmin());
+                customersRepo.save(customers);
+            }
+            else{
+                throw new RuntimeException("User with this email was registered earlier");
+            }
         }
         catch (Exception e)
         {
@@ -34,12 +39,12 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void delCustomers(Long idForDel, Long idUser) {
         try {
-          Customers admin = customersRepo.findByIdAndAdminIsTrue(idUser);
-          if (admin.isAdmin()){
+          Customers admin = customersRepo.findById(idUser).orElseThrow();
+          if (admin.getAdmin().equals("admin") && customersRepo.existsById(idForDel)){
               customersRepo.deleteById(idForDel);
           }
           else {
-              throw new RuntimeException("User is not admin!");
+              throw new RuntimeException("User is not admin or this account isn't found!");
           }
         }
         catch (Exception e)

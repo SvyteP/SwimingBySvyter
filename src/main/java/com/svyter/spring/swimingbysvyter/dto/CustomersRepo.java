@@ -9,4 +9,5 @@ public interface CustomersRepo extends CrudRepository<Customers,Long> {
 
     Customers findByEmail(String email);
     Customers findByIdAndAdminIsTrue(Long id);
+    Boolean existsAllByEmail(String email);
 }

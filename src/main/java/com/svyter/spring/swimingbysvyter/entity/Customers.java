@@ -1,6 +1,7 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+
 import lombok.Data;
 
 import java.util.List;
@@ -17,10 +18,11 @@ public class Customers {
     private String name;
     @Column(name = "password")
     private String pass;
+
     @Column(name = "email")
     private String email;
     @Column(name = "is_admin")
-    private boolean admin;
+    private String admin;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
     private List <Categories> categories;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
@@ -32,7 +34,7 @@ public class Customers {
     public Customers() {
 
     }
-    public Customers(String name, String pass, String email, boolean admin) {
+    public Customers(String name, String pass, String email, String admin) {
         this.name = name;
         this.pass = pass;
         this.email = email;

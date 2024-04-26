@@ -3,7 +3,7 @@ package com.svyter.spring.swimingbysvyter.controller;
 import com.svyter.spring.swimingbysvyter.model.CustomersEditPass;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,7 @@ public class CustomersController {
     }
     @PutMapping
     public ResponseEntity<String> editLogin(@RequestParam Long id,
-                                               @RequestBody String login){
+                                            @RequestBody String login){
         try {
             customersService.editLogin(id,login);
             return ResponseEntity.ok().body("Login was edited");
