@@ -1,22 +1,28 @@
 package com.svyter.spring.swimingbysvyter.model;
 
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import org.springframework.lang.NonNull;
 
 @Data
 public class QuestionerModel {
+
+    @Positive(message = "This is a required field!")
     private int langthPool;
-
+    @NotBlank(message = "This is a required field!")
     private String gender;
-
+    @Positive(message = "This is a required field!")
     private int age;
-
+    @NotBlank(message = "This is a required field!")
     private String levelTrain;
-
+    @Positive(message = "This is a required field!")
     private int timeTrain;
-
+    @Positive(message = "This is a required field!")
     private int countWeek;
-
+    @Positive(message = "This is a required field!")
     private int countTrainOneWeek;
 
     public QuestionerModel() {

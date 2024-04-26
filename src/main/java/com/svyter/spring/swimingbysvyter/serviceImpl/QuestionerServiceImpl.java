@@ -18,10 +18,12 @@ public class QuestionerServiceImpl implements QuestionerService {
     @Override
     public void createQuestioner(QuestionerModel questionerModel) {
         try {
+
             Questioner questioner = new Questioner(questionerModel.getLangthPool(), questionerModel.getGender(), questionerModel.getAge(),
-                                                    questionerModel.getLevelTrain(), questionerModel.getTimeTrain(), questionerModel.getCountWeek(),
-                                                    questionerModel.getCountTrainOneWeek());
+                    questionerModel.getLevelTrain(), questionerModel.getTimeTrain(), questionerModel.getCountWeek(),
+                    questionerModel.getCountTrainOneWeek());
             questionerRepo.save(questioner);
+
         }
         catch (Exception e)
         {
@@ -62,7 +64,14 @@ public class QuestionerServiceImpl implements QuestionerService {
     }
 
     @Override
-    public void delQuestioner(Long idCustomers) {
+    public void delQuestioner(Long idQuest) {
+        try {
+            questionerRepo.delete(questionerRepo.findById(idQuest).orElseThrow());
+        }
+        catch (Exception e)
+        {
+            throw  new RuntimeException(e.getMessage());
+        }
 
     }
 }

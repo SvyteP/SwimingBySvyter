@@ -6,5 +6,5 @@ public interface QuestionerService {
      void createQuestioner(QuestionerModel questionerModel);
      void editQuestioner(QuestionerModel questionerModel, Long id);
      QuestionerModel getQuestioner(Long idCustomers);
-     void delQuestioner(Long idCustomers);
+     void delQuestioner(Long idQuest);
 }
