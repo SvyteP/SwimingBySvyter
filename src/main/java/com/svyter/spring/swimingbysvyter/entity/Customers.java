@@ -27,10 +27,10 @@ public class Customers {
     private List <Categories> categories;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
     private List <UserListTrainings> userListTrainings;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
-    private List <Questioner> questioner;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
-    private List <Inventory> inventory;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
+    private Questioner questioner;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
+    private Inventory inventory;
     public Customers() {
 
     }

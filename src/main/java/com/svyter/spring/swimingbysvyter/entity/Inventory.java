@@ -22,7 +22,7 @@ public class Inventory {
     private boolean flippers;
     @Column(name = "snorkel")
     private boolean snorkel;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customers")
     private Customers customers;
 

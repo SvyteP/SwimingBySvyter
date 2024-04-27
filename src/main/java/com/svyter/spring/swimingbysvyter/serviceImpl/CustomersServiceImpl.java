@@ -2,10 +2,14 @@ package com.svyter.spring.swimingbysvyter.serviceImpl;
 
 import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
+import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomersServiceImpl implements CustomersService {
@@ -74,6 +78,29 @@ public class CustomersServiceImpl implements CustomersService {
             customersRepo.save(customers);
         }
         catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<CustomersGetModel> getCustomers() {
+        try {
+            return  customersRepo.findAll().stream().map(CustomersGetModel::convertCustomersToModel).toList();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public CustomersGetModel getCustomer(Long id) {
+        try {
+            return CustomersGetModel.convertCustomersToModel(customersRepo.findById(id).orElseThrow());
+        }
+        catch (Exception e)
+        {
             throw new RuntimeException(e.getMessage());
         }
     }

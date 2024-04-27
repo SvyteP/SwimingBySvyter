@@ -21,7 +21,7 @@ public class CustomersController {
         this.customersService = customersService;
     }
     @PostMapping
-    public ResponseEntity<String> regCustomers( @Valid CustomersRegModel customersRegModel){
+    public ResponseEntity<String> regCustomers( @Valid @RequestBody CustomersRegModel customersRegModel){
         try {
             customersService.regCustomers(customersRegModel);
             return ResponseEntity.ok().body("Customers was registered");
@@ -57,6 +57,25 @@ public class CustomersController {
         try {
             customersService.editPass(customersEditPass.getEmail(), customersEditPass.getPass());
             return ResponseEntity.ok().body("Pass was edited");
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity getCustomer(@PathVariable Long id){
+        try {
+
+            return ResponseEntity.ok().body(customersService.getCustomer(id));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping
+    public ResponseEntity getCustomers(){
+        try {
+            return ResponseEntity.ok().body(customersService.getCustomers());
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

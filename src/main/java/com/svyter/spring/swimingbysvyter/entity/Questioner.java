@@ -24,7 +24,7 @@ public class Questioner {
     private int countWeek;
     @Column(name = "countTrainOneWeek")
     private int countTrainOneWeek;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customers")
     private Customers customers;
 
