@@ -20,25 +20,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         this.detailService = detailService;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // Настройка пользователей для аутентификации
-        auth.userDetailsService(detailService).passwordEncoder(NoOpPasswordEncoder.getInstance());
 
-    }
-
-    @Override
+ /*   @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.GET, "/swagger-ui/**");
         super.configure(web);
-    }
+    }*/
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Конфигурация доступа
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
                 .and()
                .formLogin()
