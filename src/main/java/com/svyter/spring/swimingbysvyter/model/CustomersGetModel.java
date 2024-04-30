@@ -14,10 +14,10 @@ public class CustomersGetModel {
     private String login;
     private String email;
     private String admin;
-    private Inventory inventory;
+    private List<Inventory> inventory;
     private Questioner questioner;
 
-    public CustomersGetModel(String login, String email, String admin, Inventory inventory, Questioner questioner) {
+    public CustomersGetModel(String login, String email, String admin, List<Inventory> inventory, Questioner questioner) {
         this.login = login;
         this.email = email;
         this.admin = admin;

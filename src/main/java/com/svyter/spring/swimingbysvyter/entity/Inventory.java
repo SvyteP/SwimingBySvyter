@@ -10,21 +10,19 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "board")
-    private boolean board;
-    @Column(name = "kolobashka")
-    private boolean kolobashka;
-    @Column(name = "paddles")
-    private boolean paddles;
-    @Column(name = "fingerPadd")
-    private boolean fingerPadd;
-    @Column(name = "flippers")
-    private boolean flippers;
-    @Column(name = "snorkel")
-    private boolean snorkel;
-    @OneToOne
+    @Column(name = "name")
+    private String name;
+    @Column(name = "you_have")
+    private boolean  youHave;
+    @ManyToOne
     @JoinColumn(name = "customers")
     private Customers customers;
 
+    public Inventory() {
+    }
 
+    public Inventory(String name, boolean youHave) {
+        this.name = name;
+        this.youHave = youHave;
+    }
 }
