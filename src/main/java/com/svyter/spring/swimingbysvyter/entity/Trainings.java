@@ -22,6 +22,9 @@ public class Trainings {
     @Column(name = "hitch")
     private String hitch;
     @OneToMany
+    @JoinColumn(name="inventory")
+    private List<Inventory> inventoryList;
+    @OneToMany
     @JoinColumn(name = "UserListTrainings")
     private List<UserListTrainings> UserListTrainings;
     @ManyToOne
