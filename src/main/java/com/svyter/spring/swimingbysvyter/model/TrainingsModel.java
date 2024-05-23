@@ -27,8 +27,7 @@ public class TrainingsModel {
 
     public static TrainingsModel convertToModel(Trainings trainings)
     {
-        TrainingsModel trainingsModel = new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
+        return new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
                                                             trainings.getMainTraining(), trainings.getHitch());
-        return trainingsModel;
     }
 }
