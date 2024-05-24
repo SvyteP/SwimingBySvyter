@@ -6,17 +6,17 @@ import lombok.Data;
 @Data
 public class InventoryModel {
     private String name;
-    private boolean  youHave;
+
     public InventoryModel() {
     }
 
-    public InventoryModel(String name, boolean youHave) {
+    public InventoryModel(String name) {
         this.name = name;
-        this.youHave = youHave;
+
     }
     public static InventoryModel convertToModel(Inventory inventory)
     {
-        InventoryModel inventoryModel = new InventoryModel(inventory.getName(),inventory.isYouHave());
+        InventoryModel inventoryModel = new InventoryModel(inventory.getName());
         return inventoryModel;
     }
 

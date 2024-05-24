@@ -21,8 +21,12 @@ public class Trainings {
     private String mainTraining;
     @Column(name = "hitch")
     private String hitch;
-    @OneToMany
-    @JoinColumn(name="inventory")
+    @ManyToMany
+    @JoinTable(
+            name = "trainings_inventory_list",
+            joinColumns = @JoinColumn(name = "training_id"),
+            inverseJoinColumns = @JoinColumn(name = "inventory_id")
+    )
     private List<Inventory> inventoryList;
     @OneToMany
     @JoinColumn(name = "UserListTrainings")
@@ -35,10 +39,12 @@ public class Trainings {
 
     }
 
-    public Trainings(String name, String warmUp, String mainTraining, String hitch) {
+
+    public Trainings(String name, String warmUp, String mainTraining, String hitch, List<Inventory> inventoryList) {
         this.name = name;
         this.warmUp = warmUp;
         this.mainTraining = mainTraining;
         this.hitch = hitch;
+        this.inventoryList = inventoryList;
     }
 }

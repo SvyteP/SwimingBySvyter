@@ -3,6 +3,8 @@ package com.svyter.spring.swimingbysvyter.entity;
 import javax.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "Inventory")
@@ -12,8 +14,8 @@ public class Inventory {
     private Long id;
     @Column(name = "name")
     private String name;
-    @Column(name = "you_have")
-    private boolean  youHave;
+    @ManyToMany(mappedBy = "inventoryList")
+    private List<Trainings> trainingsList;
     @ManyToOne
     @JoinColumn(name = "customers")
     private Customers customers;
@@ -21,8 +23,7 @@ public class Inventory {
     public Inventory() {
     }
 
-    public Inventory(String name, boolean youHave) {
+    public Inventory(String name) {
         this.name = name;
-        this.youHave = youHave;
     }
 }

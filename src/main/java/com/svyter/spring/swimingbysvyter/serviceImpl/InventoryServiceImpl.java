@@ -20,7 +20,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void createInventory(InventoryModel inventoryModel) {
         try {
-            Inventory inventory = new Inventory(inventoryModel.getName(),inventoryModel.isYouHave());
+            Inventory inventory = new Inventory(inventoryModel.getName());
             inventoryRepo.save(inventory);
         }
         catch (Exception e)
@@ -55,7 +55,6 @@ public class InventoryServiceImpl implements InventoryService {
         try {
             Inventory inventory  = inventoryRepo.findById(id).orElseThrow();
             inventory.setName(inventoryModel.getName());
-            inventory.setYouHave(inventory.isYouHave());
             inventoryRepo.save(inventory);
         }
         catch (Exception e)
