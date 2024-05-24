@@ -29,10 +29,9 @@ public class Customers {
     private List <UserListTrainings> userListTrainings;
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
     private Questioner questioner;
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
-    private Inventory inventory;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
+    private List<Inventory> inventory;
     public Customers() {
-
     }
     public Customers(String name, String pass, String email, String admin) {
         this.name = name;
