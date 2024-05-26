@@ -12,4 +12,16 @@ public class Complexity {
     private Long id;
     @Column(name = "name")
     private String name;
+    @ManyToOne
+    private Trainings trainings;
+
+    public Complexity() {}
+    public Complexity(String name) {
+        this.name = name;
+    }
+
+    public Complexity(String name, Trainings trainings) {
+        this.name = name;
+        this.trainings = trainings;
+    }
 }

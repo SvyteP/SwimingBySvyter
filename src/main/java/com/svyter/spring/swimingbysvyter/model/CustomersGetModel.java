@@ -27,8 +27,7 @@ public class CustomersGetModel {
 
     public static CustomersGetModel convertCustomersToModel(Customers customers)
     {
-        CustomersGetModel customersGetModel = new CustomersGetModel(customers.getName(), customers.getEmail(), customers.getAdmin(),
+        return new CustomersGetModel(customers.getName(), customers.getEmail(), customers.getAdmin(),
                                                                     customers.getInventory(),customers.getQuestioner());
-        return customersGetModel;
     }
 }

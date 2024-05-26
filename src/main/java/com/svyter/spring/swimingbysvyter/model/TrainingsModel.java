@@ -39,10 +39,15 @@ public class TrainingsModel {
 
     public static TrainingsModel convertToModel(Trainings trainings)
     {
+<<<<<<< HEAD
         TrainingsModel trainingsModel = new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
                                                             trainings.getMainTraining(), trainings.getHitch()
                                                             ,trainings.getInventoryList().stream().map(Inventory::getName).toList()
                 );
         return trainingsModel;
+=======
+        return new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
+                                                            trainings.getMainTraining(), trainings.getHitch());
+>>>>>>> complexity
     }
 }
