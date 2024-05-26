@@ -25,7 +25,7 @@ public class ComplexityServiceImpl implements ComplexityService {
     @Override
     public void createComplexity(ComplexityModel complexityModel) {
         try{
-           if (!complexityRepo.existsByName(complexityModel.getName())){
+           if (complexityRepo.existsByName(complexityModel.getName())){
                throw new RuntimeException("Указанный уровень сложности уже существует!");
            }
             complexityRepo.save(new Complexity(complexityModel.getName()));
