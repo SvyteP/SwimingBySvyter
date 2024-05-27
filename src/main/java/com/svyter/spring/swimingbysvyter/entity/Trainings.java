@@ -32,7 +32,6 @@ public class Trainings {
     @JoinColumn(name = "UserListTrainings")
     private List<UserListTrainings> UserListTrainings;
     @ManyToOne
-    @JoinColumn(name = "complexity")
     private Complexity complexity;
 
     public Trainings() {
@@ -40,11 +39,12 @@ public class Trainings {
     }
 
 
-    public Trainings(String name, String warmUp, String mainTraining, String hitch, List<Inventory> inventoryList) {
+    public Trainings(String name, String warmUp, String mainTraining, String hitch, List<Inventory> inventoryList, Complexity complexity) {
         this.name = name;
         this.warmUp = warmUp;
         this.mainTraining = mainTraining;
         this.hitch = hitch;
         this.inventoryList = inventoryList;
+        this.complexity = complexity;
     }
 }

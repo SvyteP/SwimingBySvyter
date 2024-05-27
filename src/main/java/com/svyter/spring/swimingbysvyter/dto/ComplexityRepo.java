@@ -11,4 +11,5 @@ import java.util.List;
 public interface ComplexityRepo extends CrudRepository<Complexity,Long> {
     boolean existsByName(String name);
     List<Complexity> findAll(); // нужно это убрать переопределяет метод родителя не хорошо так делать
+    Complexity findByName(String name);
 }

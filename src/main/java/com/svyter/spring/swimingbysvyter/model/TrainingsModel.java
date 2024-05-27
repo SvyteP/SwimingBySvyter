@@ -23,31 +23,33 @@ public class TrainingsModel {
     @NotBlank
     private String hitch;
     private List<String> inventoryList;
+    @NotBlank
+    private String complexity;
     @Autowired
     private static InventoryRepo inventoryRepo;
 
     public TrainingsModel() {
     }
 
-    public TrainingsModel(String name, String warmUp, String mainTraining, String hitch, List<String> inventoryList) {
+
+    public TrainingsModel(String name, String warmUp, String mainTraining, String hitch, List<String> inventoryList, String complexity) {
         this.name = name;
         this.warmUp = warmUp;
         this.mainTraining = mainTraining;
         this.hitch = hitch;
         this.inventoryList = inventoryList;
+        this.complexity = complexity;
     }
 
     public static TrainingsModel convertToModel(Trainings trainings)
     {
-<<<<<<< HEAD
         TrainingsModel trainingsModel = new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
                                                             trainings.getMainTraining(), trainings.getHitch()
-                                                            ,trainings.getInventoryList().stream().map(Inventory::getName).toList()
+                                                            ,trainings.getInventoryList().stream().
+                                                                    map(Inventory::getName).toList(),
+                                                            trainings.getComplexity().getName()
+
                 );
         return trainingsModel;
-=======
-        return new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
-                                                            trainings.getMainTraining(), trainings.getHitch());
->>>>>>> complexity
     }
 }

@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
+import com.svyter.spring.swimingbysvyter.dto.ComplexityRepo;
 import com.svyter.spring.swimingbysvyter.dto.InventoryRepo;
 import com.svyter.spring.swimingbysvyter.dto.TrainingsRepo;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
@@ -16,10 +17,12 @@ import java.util.List;
 public class TrainingsServiceImpl implements TrainingsService {
     private final TrainingsRepo trainingsRepo;
     private final InventoryRepo inventoryRepo;
+    private final ComplexityRepo complexityRepo;
     @Autowired
-    public TrainingsServiceImpl(TrainingsRepo trainingsRepo, InventoryRepo inventoryRepo) {
+    public TrainingsServiceImpl(TrainingsRepo trainingsRepo, InventoryRepo inventoryRepo, ComplexityRepo complexityRepo) {
         this.trainingsRepo = trainingsRepo;
         this.inventoryRepo = inventoryRepo;
+        this.complexityRepo = complexityRepo;
     }
 
     @Override
@@ -41,7 +44,8 @@ public class TrainingsServiceImpl implements TrainingsService {
                                                                     throw new RuntimeException(e);
                                                                 }
                                                             }
-                                                        }).toList());
+                                                        }).toList(),
+                                               complexityRepo.findByName(trainingsModel.getComplexity()));
             trainingsRepo.save(trainings);
         }
         catch (Exception e){

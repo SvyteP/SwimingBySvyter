@@ -3,6 +3,8 @@ package com.svyter.spring.swimingbysvyter.entity;
 import javax.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "Complexity")
@@ -12,15 +14,15 @@ public class Complexity {
     private Long id;
     @Column(name = "name")
     private String name;
-    @ManyToOne
-    private Trainings trainings;
+    @OneToMany(mappedBy = "complexity")
+    private List<Trainings> trainings;
 
     public Complexity() {}
     public Complexity(String name) {
         this.name = name;
     }
 
-    public Complexity(String name, Trainings trainings) {
+    public Complexity(String name, List<Trainings> trainings) {
         this.name = name;
         this.trainings = trainings;
     }

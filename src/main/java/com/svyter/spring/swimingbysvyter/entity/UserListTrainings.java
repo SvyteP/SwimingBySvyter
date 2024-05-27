@@ -13,7 +13,6 @@ public class UserListTrainings {
     @ManyToOne
     @JoinColumn(name = "trainings")
     private Trainings trainings;
-
     @ManyToOne
     @JoinColumn(name = "Customers")
     private Customers customers;
@@ -24,6 +23,6 @@ public class UserListTrainings {
     @Column(name = "likeTrain")
     private boolean likeTrain;
     @Column(name = "complited")
-    private boolean compl;
+    private boolean complited;
 
 }
