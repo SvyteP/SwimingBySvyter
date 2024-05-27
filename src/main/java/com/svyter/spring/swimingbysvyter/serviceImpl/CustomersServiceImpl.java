@@ -19,7 +19,7 @@ public class CustomersServiceImpl implements CustomersService {
     public void regCustomers(CustomersRegModel customersRegModel) {
         try {
             Customers customers = new Customers(customersRegModel.getLogin(),customersRegModel.getPass(),
-                    customersRegModel.getEmail(), customersRegModel.isAdmin());
+                    customersRegModel.getEmail(), customersRegModel.getIsAdmin());
             customersDto.save(customers);
         }
         catch (Exception e)

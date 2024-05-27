@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 
 @Data
 public class QuestionerModel {
-
+    private Long idCustomer;
     @Positive(message = "This is a required field!")
     private int langthPool;
     @NotBlank(message = "This is a required field!")
@@ -17,18 +17,20 @@ public class QuestionerModel {
     @Positive(message = "This is a required field!")
     private int age;
     @NotBlank(message = "This is a required field!")
-    private String levelTrain;
+    private String levelTrain; // complexity, сложность тренировки
     @Positive(message = "This is a required field!")
-    private int timeTrain;
+    private int timeTrain; // время тренировки
     @Positive(message = "This is a required field!")
-    private int countWeek;
+    private int countWeek; // кол-во недель
     @Positive(message = "This is a required field!")
-    private int countTrainOneWeek;
+    private int countTrainOneWeek; // кол-во тренировок в неделю
 
     public QuestionerModel() {
     }
 
-    public QuestionerModel(int langthPool, String gender, int age, String levelTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
+
+    public QuestionerModel(Long idCustomer, int langthPool, String gender, int age, String levelTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
+        this.idCustomer = idCustomer;
         this.langthPool = langthPool;
         this.gender = gender;
         this.age = age;
@@ -39,7 +41,7 @@ public class QuestionerModel {
     }
 
     public  static QuestionerModel questionerConvertor(Questioner questioner){
-        QuestionerModel questionerModel = new QuestionerModel(questioner.getLangthPool(),questioner.getGender(),
+        QuestionerModel questionerModel = new QuestionerModel(questioner.getCustomers().getId(),questioner.getLangthPool(),questioner.getGender(),
                                                 questioner.getAge(),questioner.getLevelTrain(),
                                                 questioner.getTimeTrain(),questioner.getCountWeek(),
                                                 questioner.getCountTrainOneWeek());

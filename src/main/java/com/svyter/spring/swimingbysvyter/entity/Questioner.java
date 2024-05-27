@@ -24,11 +24,13 @@ public class Questioner {
     private int countWeek;
     @Column(name = "countTrainOneWeek")
     private int countTrainOneWeek;
-    @ManyToOne
-    @JoinColumn(name = "customers")
+    @OneToOne
+    @JoinColumn(name = "customers_id")
     private Customers customers;
 
-    public Questioner(int langthPool, String gender, int age, String levelTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
+    public Questioner(int langthPool, String gender, int age, String levelTrain,
+                      int timeTrain, int countWeek, int countTrainOneWeek,
+                      Customers customers) {
         this.langthPool = langthPool;
         this.gender = gender;
         this.age = age;
@@ -36,6 +38,7 @@ public class Questioner {
         this.timeTrain = timeTrain;
         this.countWeek = countWeek;
         this.countTrainOneWeek = countTrainOneWeek;
+        this.customers = customers;
     }
 
     public Questioner() {

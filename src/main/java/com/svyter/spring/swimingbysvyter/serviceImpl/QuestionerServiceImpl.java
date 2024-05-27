@@ -1,6 +1,8 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
+import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.dto.QuestionerRepo;
+import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
 import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
 import com.svyter.spring.swimingbysvyter.service.QuestionerService;
@@ -9,21 +11,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class QuestionerServiceImpl implements QuestionerService {
-    private QuestionerRepo questionerRepo;
+    private final QuestionerRepo questionerRepo;
+    private  final CustomersRepo customersRepo;
     @Autowired
-    public QuestionerServiceImpl(QuestionerRepo questionerRepo) {
+    public QuestionerServiceImpl(QuestionerRepo questionerRepo, CustomersRepo customersRepo) {
         this.questionerRepo = questionerRepo;
+        this.customersRepo = customersRepo;
     }
 
     @Override
     public void createQuestioner(QuestionerModel questionerModel) {
         try {
-
+            Customers customers = customersRepo.findById(questionerModel.getIdCustomer()).orElseThrow();
             Questioner questioner = new Questioner(questionerModel.getLangthPool(), questionerModel.getGender(), questionerModel.getAge(),
                     questionerModel.getLevelTrain(), questionerModel.getTimeTrain(), questionerModel.getCountWeek(),
-                    questionerModel.getCountTrainOneWeek());
+                    questionerModel.getCountTrainOneWeek(),
+                    customers);
+            customers.setQuestioner(questioner);
+            customersRepo.save(customers);
             questionerRepo.save(questioner);
-
         }
         catch (Exception e)
         {
@@ -66,7 +72,7 @@ public class QuestionerServiceImpl implements QuestionerService {
     @Override
     public void delQuestioner(Long idQuest) {
         try {
-            questionerRepo.delete(questionerRepo.findById(idQuest).orElseThrow());
+           questionerRepo.deleteById(idQuest);
         }
         catch (Exception e)
         {

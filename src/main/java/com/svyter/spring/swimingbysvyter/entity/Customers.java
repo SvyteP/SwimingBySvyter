@@ -20,17 +20,21 @@ public class Customers {
     @Column(name = "email")
     private String email;
     @Column(name = "is_admin")
-    private boolean isAdmin;
+    private String isAdmin;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
     private List <Categories> categories;
+
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
     private List <UserListTrainings> userListTrainings;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
-    private List <Questioner> questioner;
+
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
+    private Questioner questioner;
+
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
     private List <Inventory> inventory;
 
-    public Customers(String name, String pass, String email, boolean isAdmin) {
+    public Customers(String name, String pass, String email, String isAdmin) {
         this.name = name;
         this.pass = pass;
         this.email = email;
