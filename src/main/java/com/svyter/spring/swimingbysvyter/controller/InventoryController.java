@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Validated
 @RequestMapping("/inventory")
@@ -17,7 +19,7 @@ public class InventoryController {
     public InventoryController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
-    @PostMapping
+    @PostMapping()
     public ResponseEntity createInventory(@RequestBody InventoryModel inventoryModel)
     {
         try {
@@ -78,5 +80,19 @@ public class InventoryController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/set/{id}")
+    public ResponseEntity setInventory(@RequestBody List<InventoryModel> inventoryModels,@PathVariable Long id)
+    {
+        try {
+            inventoryService.setInventory(inventoryModels,id);
+            return ResponseEntity.ok().body(HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 }

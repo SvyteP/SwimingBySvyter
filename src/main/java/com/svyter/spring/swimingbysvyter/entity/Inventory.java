@@ -16,9 +16,11 @@ public class Inventory {
     private String name;
     @ManyToMany(mappedBy = "inventoryList")
     private List<Trainings> trainingsList;
+/*
     @ManyToOne
     @JoinColumn(name = "customers")
     private Customers customers;
+*/
 
     public Inventory() {
     }

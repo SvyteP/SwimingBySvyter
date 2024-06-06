@@ -1,26 +1,30 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
+import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.dto.InventoryRepo;
+import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import com.svyter.spring.swimingbysvyter.model.InventoryModel;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepo inventoryRepo;
+    private final CustomersRepo customersRepo;
     @Autowired
-    public InventoryServiceImpl(InventoryRepo inventoryRepo) {
+    public InventoryServiceImpl(InventoryRepo inventoryRepo, CustomersRepo customersRepo, CustomersRepo customersRepo1) {
         this.inventoryRepo = inventoryRepo;
+        this.customersRepo = customersRepo1;
     }
 
     @Override
     public void createInventory(InventoryModel inventoryModel) {
         try {
             Inventory inventory = new Inventory(inventoryModel.getName());
+
             inventoryRepo.save(inventory);
         }
         catch (Exception e)
@@ -67,6 +71,21 @@ public class InventoryServiceImpl implements InventoryService {
     public void delInventory(Long id) {
         try {
             inventoryRepo.deleteById(id);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void setInventory(List<InventoryModel> inventoryModels, Long id) {
+        try {
+            Customers customers =  customersRepo.findById(id).orElseThrow();
+            List<Inventory> inventories = inventoryModels.stream()
+                    .map(inventoryModel -> (inventoryRepo.findByName(inventoryModel.getName()))).toList();
+            customers.setInventory(inventories);
         }
         catch (Exception e)
         {

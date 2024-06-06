@@ -28,4 +28,17 @@ public class Questioner {
     @JoinColumn(name = "customers")
     private Customers customers;
 
+    public Questioner() {
+    }
+
+    public Questioner(int langthPool, String gender, int age, String levelTrain, int timeTrain, int countWeek, int countTrainOneWeek, Customers customers) {
+        this.langthPool = langthPool;
+        this.gender = gender;
+        this.age = age;
+        this.levelTrain = levelTrain;
+        this.timeTrain = timeTrain;
+        this.countWeek = countWeek;
+        this.countTrainOneWeek = countTrainOneWeek;
+        this.customers = customers;
+    }
 }

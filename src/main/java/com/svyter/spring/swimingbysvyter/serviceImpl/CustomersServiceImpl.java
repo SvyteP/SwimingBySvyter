@@ -23,11 +23,8 @@ public class CustomersServiceImpl implements CustomersService {
     public void regCustomers(CustomersRegModel customersRegModel) {
         try {
             if (!customersRepo.existsAllByEmail(customersRegModel.getEmail())) {
-                Customers customers = new Customers();
-                customers.setEmail(customersRegModel.getEmail());
-                customers.setName(customersRegModel.getLogin());
-                customers.setPass(customersRegModel.getPass());
-                customers.setAdmin(customersRegModel.getAdmin());
+                Customers customers = new Customers(customersRegModel.getLogin(),customersRegModel.getPass(),
+                        customersRegModel.getEmail(),customersRegModel.getAdmin());
                 customersRepo.save(customers);
             }
             else{
@@ -44,7 +41,7 @@ public class CustomersServiceImpl implements CustomersService {
     public void delCustomers(Long idForDel, Long idUser) {
         try {
           Customers admin = customersRepo.findById(idUser).orElseThrow();
-          if (admin.getAdmin().equals("admin") && customersRepo.existsById(idForDel)){
+          if (admin.getIsAdmin().equals("admin") && customersRepo.existsById(idForDel)){
               customersRepo.deleteById(idForDel);
           }
           else {

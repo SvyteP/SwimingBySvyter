@@ -25,7 +25,7 @@ public class MyCustomersDetailServiceImpl implements UserDetailsService {
         }
         return User.withUsername(customers.getEmail())
                 .password(customers.getPass())
-                .roles(customers.getAdmin())
+                .roles(customers.getIsAdmin())
                 .build();
     }
 }

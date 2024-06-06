@@ -10,6 +10,5 @@ import java.util.List;
 public interface CustomersRepo extends CrudRepository<Customers,Long> {
     List<Customers> findAll();
     Customers findByEmail(String email);
-    Customers findByIdAndAdminIsTrue(Long id);
     Boolean existsAllByEmail(String email);
 }

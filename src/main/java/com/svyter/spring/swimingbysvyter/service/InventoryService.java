@@ -10,4 +10,5 @@ public interface InventoryService {
     InventoryModel readInventory(Long id);
     void editInventory(InventoryModel inventoryModel,Long id);
     void delInventory(Long id);
+    void setInventory(List<InventoryModel> inventoryModels,Long id);
 }

@@ -5,6 +5,7 @@ import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -21,42 +22,42 @@ public class CustomersController {
         this.customersService = customersService;
     }
     @PostMapping
-    public ResponseEntity<String> regCustomers( @Valid @RequestBody CustomersRegModel customersRegModel){
+    public ResponseEntity regCustomers( @Valid @RequestBody CustomersRegModel customersRegModel){
         try {
             customersService.regCustomers(customersRegModel);
-            return ResponseEntity.ok().body("Customers was registered");
+            return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @DeleteMapping
-    public ResponseEntity<String> delCustomers(@RequestParam Long idForDel,
+    public ResponseEntity delCustomers(@RequestParam Long idForDel,
                                                @RequestParam Long id){
         try {
             customersService.delCustomers(idForDel,id);
-            return ResponseEntity.ok().body("Customers was deleted");
+            return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @PutMapping
-    public ResponseEntity<String> editLogin(@RequestParam Long id,
+    public ResponseEntity editLogin(@RequestParam Long id,
                                             @RequestBody String login){
         try {
             customersService.editLogin(id,login);
-            return ResponseEntity.ok().body("Login was edited");
+            return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @PutMapping("/pass")
-    public ResponseEntity<String> editPass(@Valid @RequestBody CustomersEditPass customersEditPass){
+    public ResponseEntity editPass(@Valid @RequestBody CustomersEditPass customersEditPass){
         try {
             customersService.editPass(customersEditPass.getEmail(), customersEditPass.getPass());
-            return ResponseEntity.ok().body("Pass was edited");
+            return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
