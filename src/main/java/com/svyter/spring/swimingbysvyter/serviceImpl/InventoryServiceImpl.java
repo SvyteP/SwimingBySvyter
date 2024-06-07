@@ -85,7 +85,8 @@ public class InventoryServiceImpl implements InventoryService {
             Customers customers =  customersRepo.findById(id).orElseThrow();
             List<Inventory> inventories = inventoryModels.stream()
                     .map(inventoryModel -> (inventoryRepo.findByName(inventoryModel.getName()))).toList();
-            customers.setInventory(inventories);
+            customers.setInventories(inventories);
+            customersRepo.save(customers);
         }
         catch (Exception e)
         {

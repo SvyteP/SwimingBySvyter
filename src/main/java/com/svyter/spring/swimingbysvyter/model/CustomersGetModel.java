@@ -14,10 +14,10 @@ public class CustomersGetModel {
     private String login;
     private String email;
     private String admin;
-    private List<Inventory> inventory;
+    private List<InventoryModel> inventory;
     private QuestionerModel questioner;
 
-    public CustomersGetModel(String login, String email, String admin, List<Inventory> inventory, QuestionerModel questioner) {
+    public CustomersGetModel(String login, String email, String admin, List<InventoryModel> inventory, QuestionerModel questioner) {
         this.login = login;
         this.email = email;
         this.admin = admin;
@@ -28,6 +28,7 @@ public class CustomersGetModel {
     public static CustomersGetModel convertCustomersToModel(Customers customers)
     {
         return new CustomersGetModel(customers.getName(), customers.getEmail(), customers.getIsAdmin(),
-                                                                    customers.getInventory(),QuestionerModel.questionerConvertor(customers.getQuestioner()));
+                                                                    customers.getInventories().stream().map(InventoryModel::convertToModel).toList(),
+                                                                    QuestionerModel.questionerConvertor(customers.getQuestioner()));
     }
 }

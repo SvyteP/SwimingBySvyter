@@ -31,8 +31,9 @@ public class Customers {
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
     private Questioner questioner;
 
-    @OneToMany
-    private List <Inventory> inventory;
+    @ManyToMany
+    @JoinColumn(name="inventories")
+    private List <Inventory> inventories;
 
     public Customers(String name, String pass, String email, String isAdmin) {
         this.name = name;

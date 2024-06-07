@@ -29,7 +29,6 @@ public class QuestionerServiceImpl implements QuestionerService {
                     customers);
             customers.setQuestioner(questioner);
             customersRepo.save(customers);
-            questionerRepo.save(questioner);
         }
         catch (Exception e)
         {

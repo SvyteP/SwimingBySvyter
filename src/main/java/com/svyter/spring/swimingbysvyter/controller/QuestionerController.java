@@ -41,8 +41,8 @@ public class QuestionerController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping
-    public ResponseEntity readQuestioner(@RequestParam Long id)
+    @GetMapping("/{id}")
+    public ResponseEntity readQuestioner(@PathVariable Long id)
     {
         try {
 
@@ -53,8 +53,8 @@ public class QuestionerController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @DeleteMapping
-    public ResponseEntity delQuestioner(@RequestParam Long id)
+    @DeleteMapping("/{id}")
+    public ResponseEntity delQuestioner(@PathVariable Long id)
     {
         try {
             questionerService.delQuestioner(id);

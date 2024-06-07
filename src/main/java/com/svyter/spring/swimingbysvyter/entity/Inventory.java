@@ -16,11 +16,8 @@ public class Inventory {
     private String name;
     @ManyToMany(mappedBy = "inventoryList")
     private List<Trainings> trainingsList;
-/*
-    @ManyToOne
-    @JoinColumn(name = "customers")
-    private Customers customers;
-*/
+    @ManyToMany(mappedBy = "inventories")
+    private List<Customers> customers;
 
     public Inventory() {
     }
