@@ -1,6 +1,8 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
 import javax.persistence.*;
+
+import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
 import lombok.Data;
 
 @Data
@@ -40,5 +42,20 @@ public class Questioner {
         this.countWeek = countWeek;
         this.countTrainOneWeek = countTrainOneWeek;
         this.customers = customers;
+    }
+
+    @Override
+    public String toString() {
+        return "Questioner{" +
+                "id=" + id +
+                ", langthPool=" + langthPool +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", levelTrain='" + levelTrain + '\'' +
+                ", timeTrain=" + timeTrain +
+                ", countWeek=" + countWeek +
+                ", countTrainOneWeek=" + countTrainOneWeek +
+                ", customers=" + CustomersGetModel.convertCustomersToModel(customers) +
+                '}';
     }
 }

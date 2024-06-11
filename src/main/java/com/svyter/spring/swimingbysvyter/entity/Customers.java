@@ -1,6 +1,9 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
 import javax.persistence.*;
+
+import com.svyter.spring.swimingbysvyter.model.InventoryModel;
+import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ public class Customers {
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
     private Questioner questioner;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="inventories")
     private List <Inventory> inventories;
 
@@ -44,5 +47,20 @@ public class Customers {
 
     public Customers() {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Customers{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", pass='" + pass + '\'' +
+                ", email='" + email + '\'' +
+                ", isAdmin='" + isAdmin + '\'' +
+                ", categories=" + categories +
+                ", userListTrainings=" + userListTrainings +
+                ", questioner=" + QuestionerModel.questionerConvertor(questioner)+
+                ", inventories=" + inventories.stream().map(InventoryModel::convertToModel).toList() +
+                '}';
     }
 }

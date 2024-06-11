@@ -9,6 +9,7 @@ import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -83,8 +84,10 @@ public class InventoryServiceImpl implements InventoryService {
     public void setInventory(List<InventoryModel> inventoryModels, Long id) {
         try {
             Customers customers =  customersRepo.findById(id).orElseThrow();
-            List<Inventory> inventories = inventoryModels.stream()
-                    .map(inventoryModel -> (inventoryRepo.findByName(inventoryModel.getName()))).toList();
+            List<Inventory> inventories = new ArrayList<>() ;
+            //Рабочий способ
+            inventoryModels.forEach(inventoryModel ->
+                    inventories.add(inventoryRepo.findByName(inventoryModel.getName())));
             customers.setInventories(inventories);
             customersRepo.save(customers);
         }

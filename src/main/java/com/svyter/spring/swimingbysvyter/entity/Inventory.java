@@ -1,6 +1,8 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
 import javax.persistence.*;
+
+import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
 import lombok.Data;
 
 import java.util.List;
@@ -24,5 +26,15 @@ public class Inventory {
 
     public Inventory(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Inventory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", trainingsList=" + trainingsList +
+                ", customers=" + customers.stream().map(CustomersGetModel::convertCustomersToModel).toList() +
+                '}';
     }
 }

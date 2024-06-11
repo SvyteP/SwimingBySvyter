@@ -41,7 +41,7 @@ public class TrainingsServiceImpl implements TrainingsService {
                                                                 try {
                                                                     throw new NotFoundInventoryException(name);
                                                                 } catch (NotFoundInventoryException e) {
-                                                                    throw new RuntimeException(e);
+                                                                    throw new RuntimeException(e.getMessage());
                                                                 }
                                                             }
                                                         }).toList(),
