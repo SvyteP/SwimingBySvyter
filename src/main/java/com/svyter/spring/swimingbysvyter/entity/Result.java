@@ -19,4 +19,7 @@ public class Result {
     private String m200;
     @Column(name = "mainExer")
     private String mainExer;
+    @OneToOne
+    @JoinColumn(name = "User_list_Trainings")
+    private UserListTrainings userListTrainings;
 }
