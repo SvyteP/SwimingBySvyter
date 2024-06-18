@@ -20,6 +20,9 @@ public class Result {
     @Column(name = "mainExer")
     private String mainExer;
     @OneToOne
-    @JoinColumn(name = "User_list_Trainings")
+    @JoinColumns({
+            @JoinColumn(name = "trainingsId"),
+            @JoinColumn(name = "customersId")
+    })
     private UserListTrainings userListTrainings;
 }
