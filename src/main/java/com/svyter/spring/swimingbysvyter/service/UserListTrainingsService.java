@@ -8,7 +8,7 @@ import com.svyter.spring.swimingbysvyter.model.UserListTrainingsPostModel;
 import java.util.List;
 
 public interface UserListTrainingsService {
-    public void createUserListTrainings(Long idCustomers, UserListTrainingsPostModel userListTrainingsPostModel);
+    public void createUserListTrainings(Long idCustomers);
     public UserListTrainingsGetModel readOneUserListTrainings(CustomersTrainingsId customersTrainingsId);
     public List<UserListTrainingsGetModel> readUserListTrainings(Long idCustomers);
     public List<UserListTrainingsGetModel> readAllUserListTrainings();

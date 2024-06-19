@@ -1,4 +1,4 @@
-package com.svyter.spring.swimingbysvyter.serviceImpl;
+package com.svyter.spring.swimingbysvyter.security;
 
 import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;

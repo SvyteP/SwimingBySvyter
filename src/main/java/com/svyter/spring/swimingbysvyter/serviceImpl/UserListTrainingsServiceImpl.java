@@ -35,16 +35,18 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
     }
 
     @Override
-    public void createUserListTrainings(Long idCustomers, UserListTrainingsPostModel userListTrainingsPostModel) {
+    public void createUserListTrainings(Long idCustomers) {
         Customers customers = customersRepo.findById(idCustomers).orElseThrow();
         Questioner questioner = customers.getQuestioner();
         List<Trainings> trainings = trainingsRepo.findAll();
         int allCountTrain = questioner.getCountWeek()*questioner.getCountTrainOneWeek();
 
         List<Trainings> customerTrain = trainings.stream()
-                .filter(train ->new HashSet<>(train.getInventoryList()).containsAll(customers.getInventories()))
+                .filter(train ->new HashSet<>(train.getInventoryList()).containsAll(customers.getInventories())
+                                                && train.getComplexity().getName().equals(questioner.getLevelTrain()))
                 .toList();
         Iterator<Trainings> iterator = customerTrain.iterator();
+
 
         for (int i=0;i<allCountTrain;i++){
             if (iterator.hasNext())
@@ -54,7 +56,7 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
                 UserListTrainings userListTrainings = new UserListTrainings(customersTrainingsId,train,customers,false,false);
             }
             else {
-            iterator = customerTrain.iterator();
+                iterator = customerTrain.iterator();
             }
 
         }
