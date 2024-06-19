@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import com.svyter.spring.swimingbysvyter.model.InventoryModel;
 import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
+import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class Customers {
                 ", email='" + email + '\'' +
                 ", isAdmin='" + isAdmin + '\'' +
                 ", categories=" + categories +
-                ", userListTrainings=" + userListTrainings +
+                ", userListTrainings=" + userListTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
                 ", questioner=" + QuestionerModel.questionerConvertor(questioner)+
                 ", inventories=" + inventories.stream().map(InventoryModel::convertToModel).toList() +
                 '}';

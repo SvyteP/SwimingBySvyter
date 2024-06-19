@@ -1,6 +1,10 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
 import javax.persistence.*;
+
+import com.svyter.spring.swimingbysvyter.model.ComplexityModel;
+import com.svyter.spring.swimingbysvyter.model.InventoryModel;
+import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
 import lombok.Data;
 
 import java.util.List;
@@ -30,7 +34,7 @@ public class Trainings {
     private List<Inventory> inventoryList;
     @OneToMany
     @JoinColumn(name = "UserListTrainings")
-    private List<UserListTrainings> UserListTrainings;
+    private List<UserListTrainings> userListTrainings;
     @ManyToOne
     private Complexity complexity;
 
@@ -46,5 +50,19 @@ public class Trainings {
         this.hitch = hitch;
         this.inventoryList = inventoryList;
         this.complexity = complexity;
+    }
+
+    @Override
+    public String toString() {
+        return "Trainings{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", warmUp='" + warmUp + '\'' +
+                ", mainTraining='" + mainTraining + '\'' +
+                ", hitch='" + hitch + '\'' +
+                ", inventoryList=" + inventoryList.stream().map(InventoryModel::convertToModel).toList()+
+                ", UserListTrainings=" + userListTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
+                ", complexity=" + ComplexityModel.convertToModel(complexity) +
+                '}';
     }
 }

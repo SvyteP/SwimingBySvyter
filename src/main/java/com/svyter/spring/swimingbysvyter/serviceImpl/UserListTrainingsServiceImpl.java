@@ -42,24 +42,16 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
         int allCountTrain = questioner.getCountWeek()*questioner.getCountTrainOneWeek();
 
         List<Trainings> customerTrain = trainings.stream()
-                .filter(train ->new HashSet<>(train.getInventoryList()).containsAll(customers.getInventories())
-                                                && train.getComplexity().getName().equals(questioner.getLevelTrain()))
+             .filter(train ->new HashSet<>(customers.getInventories()).containsAll(train.getInventoryList())
+                                              && train.getComplexity().getName().equals(questioner.getLevelTrain()))
                 .toList();
-        Iterator<Trainings> iterator = customerTrain.iterator();
 
-
-        for (int i=0;i<allCountTrain;i++){
-            if (iterator.hasNext())
-            {
-                Trainings train = iterator.next();
-                CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(customers.getId(),train.getId());
-                UserListTrainings userListTrainings = new UserListTrainings(customersTrainingsId,train,customers,false,false);
-            }
-            else {
-                iterator = customerTrain.iterator();
-            }
-
+        for (Trainings train : customerTrain) {
+            CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(customers.getId(), train.getId());
+            UserListTrainings userListTrainings = new UserListTrainings(customersTrainingsId, train, customers, false, false);
+            userListTrainingsRepo.save(userListTrainings);
         }
+
 
     }
 

@@ -19,7 +19,7 @@ public class UserListTrainingsGetModel {
         this.likeTrain = likeTrain;
         this.complited = complited;
     }
-    public UserListTrainingsGetModel convertToModel (UserListTrainings userListTrainings)
+    public static UserListTrainingsGetModel convertToModel (UserListTrainings userListTrainings)
     {
         UserListTrainingsGetModel userListTrainingsGetModel = new UserListTrainingsGetModel(CustomersGetModel.convertCustomersToModel(userListTrainings.getCustomers()),
                                                                                             TrainingsModel.convertToModel(userListTrainings.getTrainings()),
