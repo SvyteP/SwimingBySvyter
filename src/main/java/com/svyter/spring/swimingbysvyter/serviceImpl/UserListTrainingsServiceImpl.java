@@ -36,38 +36,64 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
 
     @Override
     public void createUserListTrainings(Long idCustomers) {
-        Customers customers = customersRepo.findById(idCustomers).orElseThrow();
-        Questioner questioner = customers.getQuestioner();
-        List<Trainings> trainings = trainingsRepo.findAll();
-        int allCountTrain = questioner.getCountWeek()*questioner.getCountTrainOneWeek();
+      try {
+          Customers customers = customersRepo.findById(idCustomers).orElseThrow();
+          Questioner questioner = customers.getQuestioner();
+          List<Trainings> trainings = trainingsRepo.findAll();
+          int allCountTrain = questioner.getCountWeek()*questioner.getCountTrainOneWeek();
 
-        List<Trainings> customerTrain = trainings.stream()
-             .filter(train ->new HashSet<>(customers.getInventories()).containsAll(train.getInventoryList())
-                                              && train.getComplexity().getName().equals(questioner.getLevelTrain()))
-                .toList();
-
-        for (Trainings train : customerTrain) {
-            CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(customers.getId(), train.getId());
-            UserListTrainings userListTrainings = new UserListTrainings(customersTrainingsId, train, customers, false, false);
-            userListTrainingsRepo.save(userListTrainings);
+          List<Trainings> customerTrain = trainings.stream()
+                  .filter(train ->new HashSet<>(customers.getInventories()).containsAll(train.getInventoryList())
+                          && train.getComplexity().getName().equals(questioner.getLevelTrain()))
+                  .toList();
+        if(customerTrain.isEmpty()){
+            throw new RuntimeException("Тренировки по указанным критериям не найдены!");
         }
-
-
+          for (Trainings train : customerTrain) {
+              CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(customers.getId(), train.getId());
+              UserListTrainings userListTrainings = new UserListTrainings(customersTrainingsId, train, customers, false, false);
+              userListTrainingsRepo.save(userListTrainings);
+          }
+      }
+      catch (Exception e){
+          throw new RuntimeException(e.getMessage());
+      }
     }
 
     @Override
     public UserListTrainingsGetModel readOneUserListTrainings(CustomersTrainingsId customersTrainingsId) {
-        return null;
+        try {
+            return UserListTrainingsGetModel.convertToModel(userListTrainingsRepo.findById(customersTrainingsId).orElseThrow());
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override
     public List<UserListTrainingsGetModel> readUserListTrainings(Long idCustomers) {
-        return null;
+      try {
+          return userListTrainingsRepo.findAllByCustomers(idCustomers).stream()
+                                                                        .map(UserListTrainingsGetModel::convertToModel)
+                                                                        .toList();
+      }
+      catch (Exception e){
+          throw new RuntimeException(e.getMessage());
+      }
     }
 
     @Override
     public List<UserListTrainingsGetModel> readAllUserListTrainings() {
-        return null;
+        try {
+            return null;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override
