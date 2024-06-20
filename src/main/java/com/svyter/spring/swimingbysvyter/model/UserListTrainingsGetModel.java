@@ -1,8 +1,10 @@
 package com.svyter.spring.swimingbysvyter.model;
 
 import com.svyter.spring.swimingbysvyter.entity.UserListTrainings;
+import lombok.Data;
 
 import javax.persistence.Column;
+@Data
 
 public class UserListTrainingsGetModel {
     private CustomersGetModel customersGetModel;
