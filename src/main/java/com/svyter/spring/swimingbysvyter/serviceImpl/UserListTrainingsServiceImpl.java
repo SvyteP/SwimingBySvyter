@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserListTrainingsServiceImpl implements UserListTrainingsService {
@@ -87,7 +88,10 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
     @Override
     public List<UserListTrainingsGetModel> readAllUserListTrainings() {
         try {
-            return null;
+            Iterable<UserListTrainings> iterable = userListTrainingsRepo.findAll();
+            return StreamSupport.stream(iterable.spliterator(), false)
+                    .map(UserListTrainingsGetModel::convertToModel)
+                    .toList();
         }
         catch (Exception e)
         {
@@ -98,11 +102,26 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
 
     @Override
     public void editUserListTrainings(CustomersTrainingsId customersTrainingsId, UserListTrainingsPostModel userListTrainingsPostModel) {
-
+        try {
+            UserListTrainings userListTrainings = userListTrainingsRepo.findById(customersTrainingsId).orElseThrow();
+            userListTrainings.setLikeTrain(userListTrainingsPostModel.isLikeTrain());
+            userListTrainings.setComplited(userListTrainings.isComplited());
+            userListTrainingsRepo.save(userListTrainings);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
     public void deleteOneUserListTrainings(CustomersTrainingsId customersTrainingsId) {
-
+        try {
+            userListTrainingsRepo.deleteById(customersTrainingsId);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
