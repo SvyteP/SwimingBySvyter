@@ -65,7 +65,7 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
-    //
+    // Удаление подобранной тренировки(по id-пользователя и id-тренировки)
     @DeleteMapping("/{idCustomers}/{idTraining}")
     public ResponseEntity deleteOneUserListTrainings(@PathVariable Long idCustomers,
                                                      @PathVariable Long idTraining)
