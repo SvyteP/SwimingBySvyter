@@ -15,9 +15,9 @@ public class UserListTrainingsController {
     public UserListTrainingsController(UserListTrainingsService userListTrainingsService) {
         this.userListTrainingsService = userListTrainingsService;
     }
-
+    // Подбор тренировок
     @PostMapping("/{idCustomers}")
-    public ResponseEntity delTrain(@PathVariable Long idCustomers)
+    public ResponseEntity generateTrainings(@PathVariable Long idCustomers)
     {
         try {
             userListTrainingsService.createUserListTrainings(idCustomers);
@@ -28,6 +28,7 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
+    // Вывод списка всех тренировок, которые были подобраны пользователям
     @GetMapping
     public ResponseEntity getAllCustomersListTrainings()
     {
@@ -39,6 +40,7 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
+    // Вывод всех тренировок 1-го пользователя
     @GetMapping("/{idCustomers}")
     public ResponseEntity getAllForCustomers(@PathVariable Long idCustomers)
     {
@@ -50,11 +52,27 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
-    @GetMapping("/one")
-    public ResponseEntity getOneUserListTrainings(@RequestBody CustomersTrainingsId customersTrainingsId)
+    // Вывод конкретной тренировки по id-пользователя и id-тренировки
+    @GetMapping("/one/{idCustomers}/{idTraining}")
+    public ResponseEntity getOneUserListTrainings(@PathVariable Long idCustomers,
+                                                  @PathVariable Long idTraining)
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.readOneUserListTrainings(customersTrainingsId));
+            return ResponseEntity.ok().body(userListTrainingsService.readOneUserListTrainings(idTraining,idCustomers));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    //
+    @DeleteMapping("/{idCustomers}/{idTraining}")
+    public ResponseEntity deleteOneUserListTrainings(@PathVariable Long idCustomers,
+                                                     @PathVariable Long idTraining)
+    {
+        try {
+            userListTrainingsService.deleteOneUserListTrainings(idTraining,idCustomers);
+            return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
         {

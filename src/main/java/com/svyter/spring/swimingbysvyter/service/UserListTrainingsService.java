@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface UserListTrainingsService {
     public void createUserListTrainings(Long idCustomers);
-    public UserListTrainingsGetModel readOneUserListTrainings(CustomersTrainingsId customersTrainingsId);
+    public UserListTrainingsGetModel readOneUserListTrainings(Long idTraining,Long idCustomer);
     public List<UserListTrainingsGetModel> readUserListTrainings(Long idCustomers);
     public List<UserListTrainingsGetModel> readAllUserListTrainings();
     public void editUserListTrainings(CustomersTrainingsId customersTrainingsId, UserListTrainingsPostModel userListTrainingsPostModel);
-    public void deleteOneUserListTrainings(CustomersTrainingsId customersTrainingsId);
+    public void deleteOneUserListTrainings(Long idTraining,Long idCustomer);
 
 }

@@ -62,8 +62,9 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
     }
 
     @Override
-    public UserListTrainingsGetModel readOneUserListTrainings(CustomersTrainingsId customersTrainingsId) {
+    public UserListTrainingsGetModel readOneUserListTrainings(Long idTraining,Long idCustomer) {
         try {
+            CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(idCustomer,idTraining);
             return UserListTrainingsGetModel.convertToModel(userListTrainingsRepo.findById(customersTrainingsId).orElseThrow());
         }
         catch (Exception e)
@@ -76,7 +77,8 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
     @Override
     public List<UserListTrainingsGetModel> readUserListTrainings(Long idCustomers) {
       try {
-          return userListTrainingsRepo.findAllByCustomers(idCustomers).stream()
+          Customers customers = customersRepo.findById(idCustomers).orElseThrow();
+          return userListTrainingsRepo.findAllByCustomers(customers).stream()
                                                                         .map(UserListTrainingsGetModel::convertToModel)
                                                                         .toList();
       }
@@ -115,8 +117,9 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
     }
 
     @Override
-    public void deleteOneUserListTrainings(CustomersTrainingsId customersTrainingsId) {
+    public void deleteOneUserListTrainings(Long idTraining,Long idCustomer) {
         try {
+            CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(idCustomer,idTraining);
             userListTrainingsRepo.deleteById(customersTrainingsId);
         }
         catch (Exception e)
