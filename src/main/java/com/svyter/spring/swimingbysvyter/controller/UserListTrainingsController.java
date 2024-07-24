@@ -80,5 +80,33 @@ public class UserListTrainingsController {
         }
     }
 
+    @PutMapping("/like/{idCustomers}/{idTraining}")
+    public ResponseEntity isLikeTraining(@PathVariable Long idCustomers,
+                                             @PathVariable Long idTraining,
+                                             @RequestParam boolean isLike)
+    {
+        try {
+            userListTrainingsService.isLikeTraining(idTraining,idCustomers,isLike);
+            return ResponseEntity.ok().body(HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    @PutMapping("/complite/{idCustomers}/{idTraining}")
+    public ResponseEntity isCompliteTraining(@PathVariable Long idCustomers,
+                                             @PathVariable Long idTraining,
+                                             @RequestParam boolean isCompl)
+    {
+        try {
+            userListTrainingsService.isCompliteTraining(idTraining,idCustomers,isCompl);
+            return ResponseEntity.ok().body(HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
 }

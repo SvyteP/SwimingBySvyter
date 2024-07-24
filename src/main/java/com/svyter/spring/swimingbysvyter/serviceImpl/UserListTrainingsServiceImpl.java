@@ -9,17 +9,11 @@ import com.svyter.spring.swimingbysvyter.entity.Trainings;
 import com.svyter.spring.swimingbysvyter.entity.UserListTrainings;
 import com.svyter.spring.swimingbysvyter.joinClass.CustomersTrainingsId;
 import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
-import com.svyter.spring.swimingbysvyter.model.UserListTrainingsPostModel;
 import com.svyter.spring.swimingbysvyter.service.UserListTrainingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -103,11 +97,25 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
     }
 
     @Override
-    public void editUserListTrainings(CustomersTrainingsId customersTrainingsId, UserListTrainingsPostModel userListTrainingsPostModel) {
+    public void isLikeTraining(Long idTraining,Long idCustomer, boolean isLike) {
         try {
+            CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(idCustomer,idTraining);
             UserListTrainings userListTrainings = userListTrainingsRepo.findById(customersTrainingsId).orElseThrow();
-            userListTrainings.setLikeTrain(userListTrainingsPostModel.isLikeTrain());
-            userListTrainings.setComplited(userListTrainings.isComplited());
+            userListTrainings.setLikeTrain(isLike);
+            userListTrainingsRepo.save(userListTrainings);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void isCompliteTraining(Long idTraining, Long idCustomer, boolean isCompl) {
+        try {
+            CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(idCustomer,idTraining);
+            UserListTrainings userListTrainings = userListTrainingsRepo.findById(customersTrainingsId).orElseThrow();
+            userListTrainings.setComplited(isCompl);
             userListTrainingsRepo.save(userListTrainings);
         }
         catch (Exception e)
