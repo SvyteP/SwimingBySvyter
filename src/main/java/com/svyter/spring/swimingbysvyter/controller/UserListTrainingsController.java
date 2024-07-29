@@ -108,5 +108,28 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
+    @GetMapping("/complite/{customersId}")
+    public ResponseEntity complitedTrainingsList(@PathVariable Long customersId)
+    {
+        try {
+            return ResponseEntity.ok().body(userListTrainingsService.isComplitedTrainingsList(customersId));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    @GetMapping("/like/{customersId}")
+    public ResponseEntity likeTrainingsList(@PathVariable Long customersId)
+    {
+        try {
+            return ResponseEntity.ok().body(userListTrainingsService.isLikeTrainingsList(customersId));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 
 }

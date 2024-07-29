@@ -8,6 +8,7 @@ import com.svyter.spring.swimingbysvyter.entity.Questioner;
 import com.svyter.spring.swimingbysvyter.entity.Trainings;
 import com.svyter.spring.swimingbysvyter.entity.UserListTrainings;
 import com.svyter.spring.swimingbysvyter.joinClass.CustomersTrainingsId;
+import com.svyter.spring.swimingbysvyter.model.TrainingsModel;
 import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
 import com.svyter.spring.swimingbysvyter.service.UserListTrainingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,31 @@ public class UserListTrainingsServiceImpl implements UserListTrainingsService {
         try {
             CustomersTrainingsId customersTrainingsId = new CustomersTrainingsId(idCustomer,idTraining);
             userListTrainingsRepo.deleteById(customersTrainingsId);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<TrainingsModel> isLikeTrainingsList(Long customersId) {
+        try {
+
+            return userListTrainingsRepo.findAllByCustomers(customersRepo.findById(customersId).orElseThrow()).
+                    stream().filter(UserListTrainings::isLikeTrain).map(UserListTrainings::getTrainings).map(TrainingsModel::convertToModel).toList();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<TrainingsModel> isComplitedTrainingsList(Long customersId) {
+        try {
+           return userListTrainingsRepo.findAllByCustomers(customersRepo.findById(customersId).orElseThrow())
+                   .stream().filter(UserListTrainings::isComplited).map(UserListTrainings::getTrainings).map(TrainingsModel::convertToModel).toList();
         }
         catch (Exception e)
         {
