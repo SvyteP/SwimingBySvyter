@@ -24,10 +24,11 @@ public class QuestionerServiceImpl implements QuestionerService {
         try {
             Customers customers = customersRepo.findById(questionerModel.getIdCustomer()).orElseThrow();
             Questioner questioner = new Questioner(questionerModel.getLangthPool(), questionerModel.getGender(), questionerModel.getAge(),
-                    questionerModel.getLevelTrain(), questionerModel.getTimeTrain(), questionerModel.getCountWeek(),
+                    questionerModel.getComplexityTrain(), questionerModel.getTimeTrain(), questionerModel.getCountWeek(),
                     questionerModel.getCountTrainOneWeek(),
                     customers);
             customers.setQuestioner(questioner);
+            questionerRepo.save(questioner);
             customersRepo.save(customers);
         }
         catch (Exception e)
@@ -40,10 +41,10 @@ public class QuestionerServiceImpl implements QuestionerService {
     public void editQuestioner(QuestionerModel questionerModel, Long id) {
         try {
            Questioner questioner = questionerRepo.findById(id).orElseThrow();
-            questioner.setLangthPool(questionerModel.getLangthPool());
+            questioner.setLengthPool(questionerModel.getLangthPool());
             questioner.setGender(questionerModel.getGender());
             questioner.setAge(questionerModel.getAge());
-            questioner.setLevelTrain(questionerModel.getLevelTrain());
+            questioner.setLevelTrain(questionerModel.getComplexityTrain());
             questioner.setTimeTrain(questionerModel.getTimeTrain());
             questioner.setCountWeek(questionerModel.getCountWeek());
             questioner.setCountTrainOneWeek(questionerModel.getCountTrainOneWeek());

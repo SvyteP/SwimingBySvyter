@@ -24,7 +24,7 @@ public class CustomersServiceImpl implements CustomersService {
         try {
             if (!customersRepo.existsAllByEmail(customersRegModel.getEmail())) {
                 Customers customers = new Customers(customersRegModel.getLogin(),customersRegModel.getPass(),
-                        customersRegModel.getEmail(),customersRegModel.getAdmin());
+                        customersRegModel.getEmail());
                 customersRepo.save(customers);
             }
             else{
@@ -40,12 +40,11 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void delCustomers(Long idForDel, Long idUser) {
         try {
-          Customers admin = customersRepo.findById(idUser).orElseThrow();
-          if (admin.getIsAdmin().equals("admin") && customersRepo.existsById(idForDel)){
+          if (customersRepo.existsById(idForDel)){
               customersRepo.deleteById(idForDel);
           }
           else {
-              throw new RuntimeException("User is not admin or this account isn't found!");
+              throw new RuntimeException("This account isn't found!");
           }
         }
         catch (Exception e)

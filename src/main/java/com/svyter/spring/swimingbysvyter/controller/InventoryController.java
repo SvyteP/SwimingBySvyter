@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
+import com.svyter.spring.swimingbysvyter.model.InventoriesModel;
 import com.svyter.spring.swimingbysvyter.model.InventoryModel;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,10 +83,10 @@ public class InventoryController {
     }
 
     @PutMapping("/set/{id}")
-    public ResponseEntity setInventory(@RequestBody List<InventoryModel> inventoryModels,@PathVariable Long id)
+    public ResponseEntity setInventory(@RequestBody InventoriesModel inventoriesModel, @PathVariable Long id)
     {
         try {
-            inventoryService.setInventory(inventoryModels,id);
+            inventoryService.setInventory(inventoriesModel,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)

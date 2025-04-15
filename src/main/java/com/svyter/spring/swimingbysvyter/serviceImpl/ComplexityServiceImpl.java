@@ -65,7 +65,7 @@ public class ComplexityServiceImpl implements ComplexityService {
         try{
         Complexity complexity = complexityRepo.findById(id).orElseThrow();
         complexity.setName(complexityModel.getName());
-
+        complexityRepo.save(complexity);
         }
         catch (Exception e)
         {

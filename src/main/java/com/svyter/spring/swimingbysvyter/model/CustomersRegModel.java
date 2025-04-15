@@ -14,6 +14,5 @@ public class CustomersRegModel {
     private String email;
     @NotBlank
     private String pass;
-    private String admin;
 
 }

@@ -17,6 +17,7 @@ public class TrainingsController {
     public TrainingsController(TrainingsService trainingsService) {
         this.trainingsService = trainingsService;
     }
+
     @PostMapping
     public ResponseEntity createTrainings(@RequestBody TrainingsModel trainingsModel)
     {

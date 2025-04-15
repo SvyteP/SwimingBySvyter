@@ -4,12 +4,17 @@ import com.svyter.spring.swimingbysvyter.model.CustomersEditPass;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @Validated
@@ -22,7 +27,7 @@ public class CustomersController {
         this.customersService = customersService;
     }
     @PostMapping
-    public ResponseEntity regCustomers( @Valid @RequestBody CustomersRegModel customersRegModel){
+    public ResponseEntity regCustomers(@Valid @RequestBody CustomersRegModel customersRegModel){
         try {
             customersService.regCustomers(customersRegModel);
             return ResponseEntity.ok().body(HttpStatus.OK);
@@ -31,9 +36,9 @@ public class CustomersController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @DeleteMapping
-    public ResponseEntity delCustomers(@RequestParam Long idForDel,
-                                               @RequestParam Long id){
+    @DeleteMapping("/{id}/{idForDel}")
+    public ResponseEntity delCustomers(@PathVariable Long idForDel,
+                                       @PathVariable Long id){
         try {
             customersService.delCustomers(idForDel,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
@@ -44,9 +49,9 @@ public class CustomersController {
     }
     @PutMapping
     public ResponseEntity editLogin(@RequestParam Long id,
-                                            @RequestBody String login){
+                                    @RequestBody Map<String,String> login){
         try {
-            customersService.editLogin(id,login);
+            customersService.editLogin(id,login.get("login"));
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){

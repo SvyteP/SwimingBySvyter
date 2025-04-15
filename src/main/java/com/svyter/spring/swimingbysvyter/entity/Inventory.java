@@ -16,8 +16,10 @@ public class Inventory {
     private Long id;
     @Column(name = "name")
     private String name;
-    @ManyToMany(mappedBy = "inventoryList")
+
+    @ManyToMany(mappedBy = "inventories")
     private List<Trainings> trainingsList;
+
     @ManyToMany(mappedBy = "inventories")
     private List<Customers> customers;
 

@@ -12,8 +12,8 @@ public class InventoryModel {
 
     public InventoryModel(String name) {
         this.name = name;
-
     }
+
     public static InventoryModel convertToModel(Inventory inventory)
     {
         InventoryModel inventoryModel = new InventoryModel(inventory.getName());

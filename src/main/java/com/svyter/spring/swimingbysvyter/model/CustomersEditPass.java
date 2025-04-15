@@ -10,5 +10,4 @@ public class CustomersEditPass {
     @Email(message = "Invalid email format")
     private String email;
     private String pass;
-    private String admin;
 }

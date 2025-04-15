@@ -17,7 +17,7 @@ public class QuestionerModel {
     @Positive(message = "This is a required field!")
     private int age;
     @NotBlank(message = "This is a required field!")
-    private String levelTrain; // complexity, сложность тренировки
+    private String complexityTrain; // complexity, сложность тренировки
     @Positive(message = "This is a required field!")
     private int timeTrain; // время тренировки
     @Positive(message = "This is a required field!")
@@ -30,19 +30,22 @@ public class QuestionerModel {
     }
 
 
-    public QuestionerModel(Long idCustomer, int langthPool, String gender, int age, String levelTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
+    public QuestionerModel(Long idCustomer, int langthPool, String gender, int age, String complexityTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
         this.idCustomer = idCustomer;
         this.langthPool = langthPool;
         this.gender = gender;
         this.age = age;
-        this.levelTrain = levelTrain;
+        this.complexityTrain = complexityTrain;
         this.timeTrain = timeTrain;
         this.countWeek = countWeek;
         this.countTrainOneWeek = countTrainOneWeek;
     }
 
     public  static QuestionerModel questionerConvertor(Questioner questioner){
-        QuestionerModel questionerModel = new QuestionerModel(questioner.getCustomers().getId(),questioner.getLangthPool(),questioner.getGender(),
+        if (questioner == null)
+            return null;
+
+        QuestionerModel questionerModel = new QuestionerModel(questioner.getCustomers().getId(),questioner.getLengthPool(),questioner.getGender(),
                                                 questioner.getAge(),questioner.getLevelTrain(),
                                                 questioner.getTimeTrain(),questioner.getCountWeek(),
                                                 questioner.getCountTrainOneWeek());

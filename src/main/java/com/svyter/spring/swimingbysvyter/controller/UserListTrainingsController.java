@@ -1,6 +1,5 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.joinClass.CustomersTrainingsId;
 import com.svyter.spring.swimingbysvyter.service.UserListTrainingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,13 +51,12 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
-    // Вывод конкретной тренировки по id-пользователя и id-тренировки
-    @GetMapping("/one/{idCustomers}/{idTraining}")
-    public ResponseEntity getOneUserListTrainings(@PathVariable Long idCustomers,
-                                                  @PathVariable Long idTraining)
+    // Вывод конкретной тренировки по id-тренировки
+    @GetMapping("/one/{userTrainingId}")
+    public ResponseEntity getOneUserListTrainings(@PathVariable Long userTrainingId)
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.readOneUserListTrainings(idTraining,idCustomers));
+            return ResponseEntity.ok().body(userListTrainingsService.readOneUserListTrainings(userTrainingId));
         }
         catch (Exception e)
         {
@@ -66,12 +64,11 @@ public class UserListTrainingsController {
         }
     }
     // Удаление подобранной тренировки(по id-пользователя и id-тренировки)
-    @DeleteMapping("/{idCustomers}/{idTraining}")
-    public ResponseEntity deleteOneUserListTrainings(@PathVariable Long idCustomers,
-                                                     @PathVariable Long idTraining)
+    @DeleteMapping("/{userTrainingId}")
+    public ResponseEntity deleteOneUserListTrainings(@PathVariable Long userTrainingId)
     {
         try {
-            userListTrainingsService.deleteOneUserListTrainings(idTraining,idCustomers);
+            userListTrainingsService.deleteOneUserListTrainings(userTrainingId);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -80,13 +77,12 @@ public class UserListTrainingsController {
         }
     }
 
-    @PutMapping("/like/{idCustomers}/{idTraining}")
-    public ResponseEntity isLikeTraining(@PathVariable Long idCustomers,
-                                             @PathVariable Long idTraining,
+    @PutMapping("/like/{userTrainingId}")
+    public ResponseEntity isLikeTraining(@PathVariable Long userTrainingId,
                                              @RequestParam boolean isLike)
     {
         try {
-            userListTrainingsService.isLikeTraining(idTraining,idCustomers,isLike);
+            userListTrainingsService.isLikeTraining(userTrainingId, isLike);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -94,13 +90,12 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
-    @PutMapping("/complite/{idCustomers}/{idTraining}")
-    public ResponseEntity isCompliteTraining(@PathVariable Long idCustomers,
-                                             @PathVariable Long idTraining,
+    @PutMapping("/complete/{userTrainingId}")
+    public ResponseEntity isCompliteTraining(@PathVariable Long userTrainingId,
                                              @RequestParam boolean isCompl)
     {
         try {
-            userListTrainingsService.isCompliteTraining(idTraining,idCustomers,isCompl);
+            userListTrainingsService.isCompliteTraining(userTrainingId,isCompl);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -108,7 +103,7 @@ public class UserListTrainingsController {
             throw new RuntimeException(e.getMessage());
         }
     }
-    @GetMapping("/complite/{customersId}")
+    @GetMapping("/complete/{customersId}")
     public ResponseEntity complitedTrainingsList(@PathVariable Long customersId)
     {
         try {

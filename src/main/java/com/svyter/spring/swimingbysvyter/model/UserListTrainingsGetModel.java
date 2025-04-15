@@ -1,32 +1,29 @@
 package com.svyter.spring.swimingbysvyter.model;
 
-import com.svyter.spring.swimingbysvyter.entity.UserListTrainings;
+import com.svyter.spring.swimingbysvyter.entity.UserTrainings;
 import lombok.Data;
 
-import javax.persistence.Column;
 @Data
-
 public class UserListTrainingsGetModel {
     private CustomersGetModel customersGetModel;
     private TrainingsModel trainingsModel;
     private boolean likeTrain;
-    private boolean complited;
+    private boolean completed;
 
-    public UserListTrainingsGetModel() {
-    }
+    public UserListTrainingsGetModel() {}
 
     public UserListTrainingsGetModel(CustomersGetModel customersGetModel, TrainingsModel trainingsModel, boolean likeTrain, boolean complited) {
         this.customersGetModel = customersGetModel;
         this.trainingsModel = trainingsModel;
         this.likeTrain = likeTrain;
-        this.complited = complited;
+        this.completed = complited;
     }
-    public static UserListTrainingsGetModel convertToModel (UserListTrainings userListTrainings)
+    public static UserListTrainingsGetModel convertToModel (UserTrainings userListTrainings)
     {
         UserListTrainingsGetModel userListTrainingsGetModel = new UserListTrainingsGetModel(CustomersGetModel.convertCustomersToModel(userListTrainings.getCustomers()),
                                                                                             TrainingsModel.convertToModel(userListTrainings.getTrainings()),
                                                                                             userListTrainings.isLikeTrain(),
-                                                                                            userListTrainings.isComplited());
+                                                                                            userListTrainings.isCompleted());
         return userListTrainingsGetModel;
     }
 }

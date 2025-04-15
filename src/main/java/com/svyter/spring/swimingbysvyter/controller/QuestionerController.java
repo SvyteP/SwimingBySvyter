@@ -17,6 +17,7 @@ public class QuestionerController {
     public QuestionerController(QuestionerService questionerService) {
         this.questionerService = questionerService;
     }
+
     @PostMapping
     public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerModel questionerModel){
         try {
@@ -29,9 +30,9 @@ public class QuestionerController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity editQuestioner(@Validated @RequestBody QuestionerModel questionerModel,
-                                         @RequestParam Long id){
+                                         @PathVariable Long id){
         try {
             questionerService.editQuestioner(questionerModel,id);
             return ResponseEntity.ok().body(HttpStatus.OK);

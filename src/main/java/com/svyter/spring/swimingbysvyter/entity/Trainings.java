@@ -7,6 +7,7 @@ import com.svyter.spring.swimingbysvyter.model.InventoryModel;
 import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -19,36 +20,38 @@ public class Trainings {
     private Long id;
     @Column(name = "name")
     private String name;
-    @Column(name = "warmUp")
-    private String warmUp;
-    @Column(name = "mainTraining")
-    private String mainTraining;
     @Column(name = "hitch")
     private String hitch;
+    @Column(name = "main_training")
+    private String mainTraining;
+    @Column(name = "warm_up")
+    private String warmUp;
+
+    @ManyToOne
+    @JoinColumn(name = "complexity_id")
+    private Complexity complexity;
+
     @ManyToMany
     @JoinTable(
-            name = "trainings_inventory_list",
-            joinColumns = @JoinColumn(name = "training_id"),
+            name = "trainings_has_inventory",
+            joinColumns = @JoinColumn(name = "trainings_id"),
             inverseJoinColumns = @JoinColumn(name = "inventory_id")
     )
-    private List<Inventory> inventoryList;
-    @OneToMany
-    @JoinColumn(name = "UserListTrainings")
-    private List<UserListTrainings> userListTrainings;
-    @ManyToOne
-    private Complexity complexity;
+    private List<Inventory> inventories;
+
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "trainings")
+    private List<UserTrainings> userTrainings;
 
     public Trainings() {
 
     }
 
-
-    public Trainings(String name, String warmUp, String mainTraining, String hitch, List<Inventory> inventoryList, Complexity complexity) {
+    public Trainings(String name, String warmUp, String mainTraining, String hitch, List<Inventory> inventories, Complexity complexity) {
         this.name = name;
         this.warmUp = warmUp;
         this.mainTraining = mainTraining;
         this.hitch = hitch;
-        this.inventoryList = inventoryList;
+        this.inventories = Collections.unmodifiableList(inventories);
         this.complexity = complexity;
     }
 
@@ -60,8 +63,8 @@ public class Trainings {
                 ", warmUp='" + warmUp + '\'' +
                 ", mainTraining='" + mainTraining + '\'' +
                 ", hitch='" + hitch + '\'' +
-                ", inventoryList=" + inventoryList.stream().map(InventoryModel::convertToModel).toList()+
-                ", UserListTrainings=" + userListTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
+                ", inventoryList=" + inventories.stream().map(InventoryModel::convertToModel).toList()+
+                ", UserListTrainings=" + userTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
                 ", complexity=" + ComplexityModel.convertToModel(complexity) +
                 '}';
     }

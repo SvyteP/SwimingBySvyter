@@ -4,6 +4,7 @@ import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.dto.InventoryRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
+import com.svyter.spring.swimingbysvyter.model.InventoriesModel;
 import com.svyter.spring.swimingbysvyter.model.InventoryModel;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,13 +82,11 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void setInventory(List<InventoryModel> inventoryModels, Long id) {
+    public void setInventory(InventoriesModel inventoriesModel, Long id) {
         try {
             Customers customers =  customersRepo.findById(id).orElseThrow();
             List<Inventory> inventories = new ArrayList<>() ;
-            //Рабочий способ
-            inventoryModels.forEach(inventoryModel ->
-                    inventories.add(inventoryRepo.findByName(inventoryModel.getName())));
+            inventoryRepo.findAllById(inventoriesModel.getInventoriesId()).forEach(inventories::add);
             customers.setInventories(inventories);
             customersRepo.save(customers);
         }

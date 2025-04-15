@@ -17,12 +17,10 @@ public class Result {
     private String m100;
     @Column(name = "m200")
     private String m200;
-    @Column(name = "mainExer")
+    @Column(name = "main_exer")
     private String mainExer;
+
     @OneToOne
-    @JoinColumns({
-            @JoinColumn(name = "trainingsId"),
-            @JoinColumn(name = "customersId")
-    })
-    private UserListTrainings userListTrainings;
+    @JoinColumn(name = "user_trainings_id")
+    private UserTrainings userTrainings;
 }

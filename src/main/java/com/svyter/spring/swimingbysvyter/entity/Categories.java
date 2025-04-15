@@ -3,6 +3,8 @@ package com.svyter.spring.swimingbysvyter.entity;
 import javax.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "Categories")
@@ -12,7 +14,6 @@ public class Categories {
     private Long id;
     @Column(name = "name")
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "customers")
-    private Customers customers;
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "category")
+    private List<Customers> customers;
 }

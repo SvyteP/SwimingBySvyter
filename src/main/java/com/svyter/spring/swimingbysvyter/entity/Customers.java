@@ -7,7 +7,6 @@ import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
 import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,27 +22,31 @@ public class Customers {
     private String pass;
     @Column(name = "email")
     private String email;
-    @Column(name = "is_admin")
-    private String isAdmin;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
-    private List <Categories> categories;
+    @ManyToOne
+    @JoinColumn(name = "categories_id")
+    private Categories category;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customers")
-    private List <UserListTrainings> userListTrainings;
+    @OneToMany(mappedBy = "customers")
+    private List <UserTrainings> userTrainings;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customers")
+    @OneToOne
+    @JoinColumn(name = "questioner_id")
     private Questioner questioner;
 
+
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="inventories")
+    @JoinTable(
+            name = "customers_has_inventory",
+            joinColumns = @JoinColumn(name = "customers_id"),
+            inverseJoinColumns = @JoinColumn(name = "inventory_id")
+    )
     private List <Inventory> inventories;
 
-    public Customers(String name, String pass, String email, String isAdmin) {
+    public Customers(String name, String pass, String email) {
         this.name = name;
         this.pass = pass;
         this.email = email;
-        this.isAdmin = isAdmin;
     }
 
     public Customers() {
@@ -57,9 +60,8 @@ public class Customers {
                 ", name='" + name + '\'' +
                 ", pass='" + pass + '\'' +
                 ", email='" + email + '\'' +
-                ", isAdmin='" + isAdmin + '\'' +
-                ", categories=" + categories +
-                ", userListTrainings=" + userListTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
+                ", categories=" + category +
+                ", userListTrainings=" + userTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
                 ", questioner=" + QuestionerModel.questionerConvertor(questioner)+
                 ", inventories=" + inventories.stream().map(InventoryModel::convertToModel).toList() +
                 '}';
