@@ -6,6 +6,7 @@ import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,7 +70,8 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void editPass(String email, String pass) {
         try {
-            Customers customers = customersRepo.findByEmail(email);
+            Customers customers = customersRepo.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException(String.format("Customer with email %s not found", email)));
             customers.setPass(pass);
             customersRepo.save(customers);
         }

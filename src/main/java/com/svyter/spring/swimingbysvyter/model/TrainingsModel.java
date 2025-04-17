@@ -3,11 +3,11 @@ package com.svyter.spring.swimingbysvyter.model;
 import com.svyter.spring.swimingbysvyter.dto.InventoryRepo;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import com.svyter.spring.swimingbysvyter.entity.Trainings;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data

@@ -3,9 +3,9 @@ package com.svyter.spring.swimingbysvyter.controller;
 import com.svyter.spring.swimingbysvyter.model.CustomersEditPass;
 import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
-import javax.validation.Valid;
-import javax.validation.ValidationException;
 
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

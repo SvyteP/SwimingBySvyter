@@ -4,8 +4,8 @@ import com.svyter.spring.swimingbysvyter.entity.Questioner;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 @Data
 public class QuestionerModel {

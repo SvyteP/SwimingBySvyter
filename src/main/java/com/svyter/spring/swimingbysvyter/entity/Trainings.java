@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.svyter.spring.swimingbysvyter.model.ComplexityModel;
 import com.svyter.spring.swimingbysvyter.model.InventoryModel;
