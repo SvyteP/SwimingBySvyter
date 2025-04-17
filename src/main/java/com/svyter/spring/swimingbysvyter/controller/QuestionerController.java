@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
+import com.svyter.spring.swimingbysvyter.dto.QuestionerDTO;
 import com.svyter.spring.swimingbysvyter.service.QuestionerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +19,9 @@ public class QuestionerController {
     }
 
     @PostMapping
-    public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerModel questionerModel){
+    public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO){
         try {
-            questionerService.createQuestioner(questionerModel);
+            questionerService.createQuestioner(questionerDTO);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -31,10 +31,10 @@ public class QuestionerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity editQuestioner(@Validated @RequestBody QuestionerModel questionerModel,
+    public ResponseEntity editQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO,
                                          @PathVariable Long id){
         try {
-            questionerService.editQuestioner(questionerModel,id);
+            questionerService.editQuestioner(questionerDTO,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)

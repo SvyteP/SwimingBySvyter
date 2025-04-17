@@ -2,9 +2,9 @@ package com.svyter.spring.swimingbysvyter.entity;
 
 import jakarta.persistence.*;
 
-import com.svyter.spring.swimingbysvyter.model.InventoryModel;
-import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
-import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
+import com.svyter.spring.swimingbysvyter.dto.InventoryDTO;
+import com.svyter.spring.swimingbysvyter.dto.QuestionerDTO;
+import com.svyter.spring.swimingbysvyter.dto.UserListTrainingsGetDTO;
 import lombok.Data;
 
 import java.util.List;
@@ -61,9 +61,9 @@ public class Customers {
                 ", pass='" + pass + '\'' +
                 ", email='" + email + '\'' +
                 ", categories=" + category +
-                ", userListTrainings=" + userTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
-                ", questioner=" + QuestionerModel.questionerConvertor(questioner)+
-                ", inventories=" + inventories.stream().map(InventoryModel::convertToModel).toList() +
+                ", userListTrainings=" + userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel).toList() +
+                ", questioner=" + QuestionerDTO.questionerConvertor(questioner)+
+                ", inventories=" + inventories.stream().map(InventoryDTO::convertToModel).toList() +
                 '}';
     }
 }

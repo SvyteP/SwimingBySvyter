@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.security;
 
-import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
+import com.svyter.spring.swimingbysvyter.repo.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

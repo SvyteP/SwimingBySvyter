@@ -1,7 +1,7 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.model.CustomersEditPass;
-import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
+import com.svyter.spring.swimingbysvyter.dto.CustomersEditPassDTO;
+import com.svyter.spring.swimingbysvyter.dto.CustomersRegDTO;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
 
 
@@ -9,9 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -26,16 +24,16 @@ public class CustomersController {
     public CustomersController(CustomersService customersService) {
         this.customersService = customersService;
     }
-    @PostMapping
-    public ResponseEntity regCustomers(@Valid @RequestBody CustomersRegModel customersRegModel){
+    /*@PostMapping
+    public ResponseEntity regCustomers(@Valid @RequestBody CustomersRegDTO customersRegDTO){
         try {
-            customersService.regCustomers(customersRegModel);
+            customersService.regCustomers(customersRegDTO);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
+    }*/
     @DeleteMapping("/{id}/{idForDel}")
     public ResponseEntity delCustomers(@PathVariable Long idForDel,
                                        @PathVariable Long id){
@@ -59,9 +57,9 @@ public class CustomersController {
         }
     }
     @PutMapping("/pass")
-    public ResponseEntity editPass(@Valid @RequestBody CustomersEditPass customersEditPass){
+    public ResponseEntity editPass(@Valid @RequestBody CustomersEditPassDTO customersEditPassDTO){
         try {
-            customersService.editPass(customersEditPass.getEmail(), customersEditPass.getPass());
+            customersService.editPass(customersEditPassDTO.getEmail(), customersEditPassDTO.getPass());
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e){

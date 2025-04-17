@@ -1,31 +1,32 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
-import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
+import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
+import com.svyter.spring.swimingbysvyter.repo.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
-import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
-import com.svyter.spring.swimingbysvyter.model.CustomersRegModel;
+import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
 import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 @Service
 public class CustomersServiceImpl implements CustomersService {
-    private CustomersRepo customersRepo;
+    private final CustomersRepo customersRepo;
+    private final MessageSource messageSource;
     @Autowired
-    public CustomersServiceImpl(CustomersRepo customersRepo) {
+    public CustomersServiceImpl(CustomersRepo customersRepo, MessageSource messageSource) {
         this.customersRepo = customersRepo;
+        this.messageSource = messageSource;
     }
 
-    @Override
-    public void regCustomers(CustomersRegModel customersRegModel) {
+   /* @Override
+    public void regCustomers(CustomersRegDTO customersRegDTO) {
         try {
-            if (!customersRepo.existsAllByEmail(customersRegModel.getEmail())) {
-                Customers customers = new Customers(customersRegModel.getLogin(),customersRegModel.getPass(),
-                        customersRegModel.getEmail());
+            if (!customersRepo.existsAllByEmail(customersRegDTO.getEmail())) {
+                Customers customers = new Customers(customersRegDTO.getLogin(), customersRegDTO.getPass(),
+                        customersRegDTO.getEmail());
                 customersRepo.save(customers);
             }
             else{
@@ -36,7 +37,7 @@ public class CustomersServiceImpl implements CustomersService {
         {
             throw new RuntimeException(e.getMessage());
         }
-    }
+    }*/
 
     @Override
     public void delCustomers(Long idForDel, Long idUser) {
@@ -45,7 +46,7 @@ public class CustomersServiceImpl implements CustomersService {
               customersRepo.deleteById(idForDel);
           }
           else {
-              throw new RuntimeException("This account isn't found!");
+              throw new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " + idForDel));
           }
         }
         catch (Exception e)
@@ -57,7 +58,9 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void editLogin(Long id, String login) {
         try {
-            Customers customers = customersRepo.findById(id).orElseThrow();
+            Customers customers = customersRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
+                    String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " +id)
+            ));
             customers.setName(login);
             customersRepo.save(customers);
         }
@@ -71,7 +74,9 @@ public class CustomersServiceImpl implements CustomersService {
     public void editPass(String email, String pass) {
         try {
             Customers customers = customersRepo.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException(String.format("Customer with email %s not found", email)));
+                    .orElseThrow(() -> new NotFoundDataException(
+                            String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"email " + email)
+                    ));
             customers.setPass(pass);
             customersRepo.save(customers);
         }
@@ -81,9 +86,9 @@ public class CustomersServiceImpl implements CustomersService {
     }
 
     @Override
-    public List<CustomersGetModel> getCustomers() {
+    public List<CustomersGetDTO> getCustomers() {
         try {
-            return  customersRepo.findAll().stream().map(CustomersGetModel::convertCustomersToModel).toList();
+            return  customersRepo.findAll().stream().map(CustomersGetDTO::convertCustomersToModel).toList();
         }
         catch (Exception e)
         {
@@ -93,9 +98,11 @@ public class CustomersServiceImpl implements CustomersService {
     }
 
     @Override
-    public CustomersGetModel getCustomer(Long id) {
+    public CustomersGetDTO getCustomer(Long id) {
         try {
-            return CustomersGetModel.convertCustomersToModel(customersRepo.findById(id).orElseThrow());
+            return CustomersGetDTO.convertCustomersToModel(customersRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
+                    String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " +id)
+            )));
         }
         catch (Exception e)
         {

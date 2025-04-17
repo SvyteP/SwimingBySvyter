@@ -1,7 +1,5 @@
-package com.svyter.spring.swimingbysvyter.dto;
+package com.svyter.spring.swimingbysvyter.repo;
 
-import com.svyter.spring.swimingbysvyter.entity.Complexity;
-import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import com.svyter.spring.swimingbysvyter.entity.Trainings;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,6 +11,7 @@ import java.util.List;
 @Repository
 public interface TrainingsRepo extends CrudRepository<Trainings, Long> {
     List<Trainings> findAll();
+    boolean existsByName(String name);
     @Query(value = """
             SELECT t.* FROM trainings t
             join trainings_has_inventory thi on t.id = thi.trainings_id

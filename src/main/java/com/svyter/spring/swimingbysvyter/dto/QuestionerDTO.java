@@ -1,4 +1,4 @@
-package com.svyter.spring.swimingbysvyter.model;
+package com.svyter.spring.swimingbysvyter.dto;
 
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
 
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 @Data
-public class QuestionerModel {
+public class QuestionerDTO {
     private Long idCustomer;
     @Positive(message = "This is a required field!")
     private int langthPool;
@@ -26,11 +26,11 @@ public class QuestionerModel {
     private int countTrainOneWeek; // кол-во тренировок в неделю
 
 
-    public QuestionerModel() {
+    public QuestionerDTO() {
     }
 
 
-    public QuestionerModel(Long idCustomer, int langthPool, String gender, int age, String complexityTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
+    public QuestionerDTO(Long idCustomer, int langthPool, String gender, int age, String complexityTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
         this.idCustomer = idCustomer;
         this.langthPool = langthPool;
         this.gender = gender;
@@ -41,14 +41,14 @@ public class QuestionerModel {
         this.countTrainOneWeek = countTrainOneWeek;
     }
 
-    public  static QuestionerModel questionerConvertor(Questioner questioner){
+    public  static QuestionerDTO questionerConvertor(Questioner questioner){
         if (questioner == null)
             return null;
 
-        QuestionerModel questionerModel = new QuestionerModel(questioner.getCustomers().getId(),questioner.getLengthPool(),questioner.getGender(),
+        QuestionerDTO questionerDTO = new QuestionerDTO(questioner.getCustomers().getId(),questioner.getLengthPool(),questioner.getGender(),
                                                 questioner.getAge(),questioner.getLevelTrain(),
                                                 questioner.getTimeTrain(),questioner.getCountWeek(),
                                                 questioner.getCountTrainOneWeek());
-        return questionerModel;
+        return questionerDTO;
     }
 }

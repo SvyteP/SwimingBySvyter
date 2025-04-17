@@ -1,4 +1,4 @@
-package com.svyter.spring.swimingbysvyter.dto;
+package com.svyter.spring.swimingbysvyter.repo;
 
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import org.springframework.data.repository.CrudRepository;
@@ -10,4 +10,5 @@ import java.util.List;
 public interface InventoryRepo extends CrudRepository<Inventory,Long> {
     List<Inventory> findAll();
     Inventory findByName(String name);
+    Boolean existsByName(String name);
 }

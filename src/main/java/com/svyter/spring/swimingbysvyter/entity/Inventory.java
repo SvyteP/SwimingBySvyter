@@ -2,7 +2,7 @@ package com.svyter.spring.swimingbysvyter.entity;
 
 import jakarta.persistence.*;
 
-import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
+import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
 import lombok.Data;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class Inventory {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", trainingsList=" + trainingsList +
-                ", customers=" + customers.stream().map(CustomersGetModel::convertCustomersToModel).toList() +
+                ", customers=" + customers.stream().map(CustomersGetDTO::convertCustomersToModel).toList() +
                 '}';
     }
 }

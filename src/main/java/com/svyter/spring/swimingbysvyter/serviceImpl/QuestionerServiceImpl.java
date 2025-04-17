@@ -1,31 +1,40 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
-import com.svyter.spring.swimingbysvyter.dto.CustomersRepo;
-import com.svyter.spring.swimingbysvyter.dto.QuestionerRepo;
+import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
+import com.svyter.spring.swimingbysvyter.repo.CustomersRepo;
+import com.svyter.spring.swimingbysvyter.repo.QuestionerRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
-import com.svyter.spring.swimingbysvyter.model.QuestionerModel;
+import com.svyter.spring.swimingbysvyter.dto.QuestionerDTO;
 import com.svyter.spring.swimingbysvyter.service.QuestionerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 
 @Service
 public class QuestionerServiceImpl implements QuestionerService {
     private final QuestionerRepo questionerRepo;
-    private  final CustomersRepo customersRepo;
+    private final CustomersRepo customersRepo;
+    private final MessageSource messageSource;
+
     @Autowired
-    public QuestionerServiceImpl(QuestionerRepo questionerRepo, CustomersRepo customersRepo) {
+    public QuestionerServiceImpl(QuestionerRepo questionerRepo, CustomersRepo customersRepo, MessageSource messageSource) {
         this.questionerRepo = questionerRepo;
         this.customersRepo = customersRepo;
+        this.messageSource = messageSource;
     }
 
     @Override
-    public void createQuestioner(QuestionerModel questionerModel) {
+    public void createQuestioner(QuestionerDTO questionerDTO) {
         try {
-            Customers customers = customersRepo.findById(questionerModel.getIdCustomer()).orElseThrow();
-            Questioner questioner = new Questioner(questionerModel.getLangthPool(), questionerModel.getGender(), questionerModel.getAge(),
-                    questionerModel.getComplexityTrain(), questionerModel.getTimeTrain(), questionerModel.getCountWeek(),
-                    questionerModel.getCountTrainOneWeek(),
+            Customers customers = customersRepo.findById(questionerDTO.getIdCustomer()).orElseThrow(() -> new NotFoundDataException(
+                    String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " + questionerDTO.getIdCustomer())
+            ));
+            Questioner questioner = new Questioner(questionerDTO.getLangthPool(), questionerDTO.getGender(), questionerDTO.getAge(),
+                    questionerDTO.getComplexityTrain(), questionerDTO.getTimeTrain(), questionerDTO.getCountWeek(),
+                    questionerDTO.getCountTrainOneWeek(),
                     customers);
             customers.setQuestioner(questioner);
             questionerRepo.save(questioner);
@@ -38,16 +47,18 @@ public class QuestionerServiceImpl implements QuestionerService {
     }
 
     @Override
-    public void editQuestioner(QuestionerModel questionerModel, Long id) {
+    public void editQuestioner(QuestionerDTO questionerDTO, Long id) {
         try {
-           Questioner questioner = questionerRepo.findById(id).orElseThrow();
-            questioner.setLengthPool(questionerModel.getLangthPool());
-            questioner.setGender(questionerModel.getGender());
-            questioner.setAge(questionerModel.getAge());
-            questioner.setLevelTrain(questionerModel.getComplexityTrain());
-            questioner.setTimeTrain(questionerModel.getTimeTrain());
-            questioner.setCountWeek(questionerModel.getCountWeek());
-            questioner.setCountTrainOneWeek(questionerModel.getCountTrainOneWeek());
+           Questioner questioner = questionerRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
+                   String.format(messageSource.getMessage("error.questioner.notfound",null, Locale.getDefault()),"id " +id)
+           ));
+            questioner.setLengthPool(questionerDTO.getLangthPool());
+            questioner.setGender(questionerDTO.getGender());
+            questioner.setAge(questionerDTO.getAge());
+            questioner.setLevelTrain(questionerDTO.getComplexityTrain());
+            questioner.setTimeTrain(questionerDTO.getTimeTrain());
+            questioner.setCountWeek(questionerDTO.getCountWeek());
+            questioner.setCountTrainOneWeek(questionerDTO.getCountTrainOneWeek());
             questionerRepo.save(questioner);
         }
         catch (Exception e)
@@ -58,9 +69,11 @@ public class QuestionerServiceImpl implements QuestionerService {
     }
 
     @Override
-    public QuestionerModel getQuestioner(Long idCustomers) {
+    public QuestionerDTO getQuestioner(Long idCustomers) {
         try {
-           return QuestionerModel.questionerConvertor(questionerRepo.findById(idCustomers).orElseThrow());
+           return QuestionerDTO.questionerConvertor(questionerRepo.findByCustomersId(idCustomers).orElseThrow(() -> new NotFoundDataException(
+                   String.format(messageSource.getMessage("error.questioner.notfound",null, Locale.getDefault()),"idCustomers " +idCustomers)
+           )));
         }
         catch (Exception e)
         {

@@ -19,7 +19,7 @@ public class UserListTrainingsController {
     public ResponseEntity generateTrainings(@PathVariable Long idCustomers)
     {
         try {
-            userListTrainingsService.createUserListTrainings(idCustomers);
+            userListTrainingsService.createUserTraining(idCustomers);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -32,7 +32,7 @@ public class UserListTrainingsController {
     public ResponseEntity getAllCustomersListTrainings()
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.readAllUserListTrainings());
+            return ResponseEntity.ok().body(userListTrainingsService.readAllUserTrainings());
         }
         catch (Exception e)
         {
@@ -44,7 +44,7 @@ public class UserListTrainingsController {
     public ResponseEntity getAllForCustomers(@PathVariable Long idCustomers)
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.readUserListTrainings(idCustomers));
+            return ResponseEntity.ok().body(userListTrainingsService.readUserTrainings(idCustomers));
         }
         catch (Exception e)
         {
@@ -56,7 +56,7 @@ public class UserListTrainingsController {
     public ResponseEntity getOneUserListTrainings(@PathVariable Long userTrainingId)
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.readOneUserListTrainings(userTrainingId));
+            return ResponseEntity.ok().body(userListTrainingsService.readOneUserTraining(userTrainingId));
         }
         catch (Exception e)
         {
@@ -68,7 +68,7 @@ public class UserListTrainingsController {
     public ResponseEntity deleteOneUserListTrainings(@PathVariable Long userTrainingId)
     {
         try {
-            userListTrainingsService.deleteOneUserListTrainings(userTrainingId);
+            userListTrainingsService.deleteUserTraining(userTrainingId);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -107,7 +107,7 @@ public class UserListTrainingsController {
     public ResponseEntity complitedTrainingsList(@PathVariable Long customersId)
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.isComplitedTrainingsList(customersId));
+            return ResponseEntity.ok().body(userListTrainingsService.isComplitedUserTraining(customersId));
         }
         catch (Exception e)
         {
@@ -118,7 +118,7 @@ public class UserListTrainingsController {
     public ResponseEntity likeTrainingsList(@PathVariable Long customersId)
     {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.isLikeTrainingsList(customersId));
+            return ResponseEntity.ok().body(userListTrainingsService.isLikeUserTraining(customersId));
         }
         catch (Exception e)
         {

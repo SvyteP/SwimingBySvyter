@@ -1,11 +1,11 @@
-package com.svyter.spring.swimingbysvyter.model;
+package com.svyter.spring.swimingbysvyter.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class CustomersEditPass {
+public class CustomersEditPassDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;

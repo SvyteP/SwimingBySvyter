@@ -1,7 +1,6 @@
-package com.svyter.spring.swimingbysvyter.dto;
+package com.svyter.spring.swimingbysvyter.repo;
 
 import com.svyter.spring.swimingbysvyter.entity.Complexity;
-import com.svyter.spring.swimingbysvyter.entity.Customers;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

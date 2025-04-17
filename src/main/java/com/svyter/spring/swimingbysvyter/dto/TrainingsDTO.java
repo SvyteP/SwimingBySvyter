@@ -1,18 +1,16 @@
-package com.svyter.spring.swimingbysvyter.model;
+package com.svyter.spring.swimingbysvyter.dto;
 
-import com.svyter.spring.swimingbysvyter.dto.InventoryRepo;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import com.svyter.spring.swimingbysvyter.entity.Trainings;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Data
 @Component
-public class TrainingsModel {
+public class TrainingsDTO {
     @NotBlank
     private String name;
     @NotBlank
@@ -28,11 +26,11 @@ public class TrainingsModel {
     private String complexity;
 
 
-    public TrainingsModel() {
+    public TrainingsDTO() {
     }
 
 
-    public TrainingsModel(String name, String warmUp, String mainTraining, String hitch, List<Long> inventories, String complexity) {
+    public TrainingsDTO(String name, String warmUp, String mainTraining, String hitch, List<Long> inventories, String complexity) {
         this.name = name;
         this.warmUp = warmUp;
         this.mainTraining = mainTraining;
@@ -41,15 +39,15 @@ public class TrainingsModel {
         this.complexity = complexity;
     }
 
-    public static TrainingsModel convertToModel(Trainings trainings)
+    public static TrainingsDTO convertToModel(Trainings trainings)
     {
-        TrainingsModel trainingsModel = new TrainingsModel(trainings.getName(),trainings.getWarmUp(),
+        TrainingsDTO trainingsDTO = new TrainingsDTO(trainings.getName(),trainings.getWarmUp(),
                                                             trainings.getMainTraining(), trainings.getHitch()
                                                             ,trainings.getInventories().stream().
                                                                     map(Inventory::getId).toList(),
                                                             trainings.getComplexity().getName()
 
                 );
-        return trainingsModel;
+        return trainingsDTO;
     }
 }

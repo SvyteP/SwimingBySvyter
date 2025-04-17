@@ -2,9 +2,9 @@ package com.svyter.spring.swimingbysvyter.entity;
 
 import jakarta.persistence.*;
 
-import com.svyter.spring.swimingbysvyter.model.ComplexityModel;
-import com.svyter.spring.swimingbysvyter.model.InventoryModel;
-import com.svyter.spring.swimingbysvyter.model.UserListTrainingsGetModel;
+import com.svyter.spring.swimingbysvyter.dto.ComplexityDTO;
+import com.svyter.spring.swimingbysvyter.dto.InventoryDTO;
+import com.svyter.spring.swimingbysvyter.dto.UserListTrainingsGetDTO;
 import lombok.Data;
 
 import java.util.Collections;
@@ -63,9 +63,9 @@ public class Trainings {
                 ", warmUp='" + warmUp + '\'' +
                 ", mainTraining='" + mainTraining + '\'' +
                 ", hitch='" + hitch + '\'' +
-                ", inventoryList=" + inventories.stream().map(InventoryModel::convertToModel).toList()+
-                ", UserListTrainings=" + userTrainings.stream().map(UserListTrainingsGetModel::convertToModel).toList() +
-                ", complexity=" + ComplexityModel.convertToModel(complexity) +
+                ", inventoryList=" + inventories.stream().map(InventoryDTO::convertToModel).toList()+
+                ", UserListTrainings=" + userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel).toList() +
+                ", complexity=" + ComplexityDTO.convertToModel(complexity) +
                 '}';
     }
 }

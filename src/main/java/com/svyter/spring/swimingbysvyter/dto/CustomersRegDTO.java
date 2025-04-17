@@ -1,4 +1,4 @@
-package com.svyter.spring.swimingbysvyter.model;
+package com.svyter.spring.swimingbysvyter.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 
 @Data
-public class CustomersRegModel {
+public class CustomersRegDTO {
     @NotBlank
     private String login;
     @Email(message = "Email должен быть действительным")

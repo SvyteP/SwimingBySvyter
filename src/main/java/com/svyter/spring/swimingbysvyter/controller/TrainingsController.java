@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.model.TrainingsModel;
+import com.svyter.spring.swimingbysvyter.dto.TrainingsDTO;
 import com.svyter.spring.swimingbysvyter.service.TrainingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +19,10 @@ public class TrainingsController {
     }
 
     @PostMapping
-    public ResponseEntity createTrainings(@RequestBody TrainingsModel trainingsModel)
+    public ResponseEntity createTrainings(@RequestBody TrainingsDTO trainingsDTO)
     {
         try {
-            trainingsService.createTrain(trainingsModel);
+            trainingsService.createTrain(trainingsDTO);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -31,10 +31,10 @@ public class TrainingsController {
         }
     }
     @PutMapping("/{id}")
-    public ResponseEntity editTrainings(@RequestBody TrainingsModel trainingsModel,@PathVariable Long id)
+    public ResponseEntity editTrainings(@RequestBody TrainingsDTO trainingsDTO, @PathVariable Long id)
     {
         try {
-            trainingsService.editTrainings(trainingsModel,id);
+            trainingsService.editTrainings(trainingsDTO,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)

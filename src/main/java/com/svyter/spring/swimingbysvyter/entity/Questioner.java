@@ -2,7 +2,7 @@ package com.svyter.spring.swimingbysvyter.entity;
 
 import jakarta.persistence.*;
 
-import com.svyter.spring.swimingbysvyter.model.CustomersGetModel;
+import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
 import lombok.Data;
 
 @Data
@@ -61,7 +61,7 @@ public class Questioner {
                 ", timeTrain=" + timeTrain +
                 ", countWeek=" + countWeek +
                 ", countTrainOneWeek=" + countTrainOneWeek +
-                ", customers=" + CustomersGetModel.convertCustomersToModel(customers) +
+                ", customers=" + CustomersGetDTO.convertCustomersToModel(customers) +
                 '}';
     }
 }

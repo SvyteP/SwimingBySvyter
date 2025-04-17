@@ -1,15 +1,13 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.model.InventoriesModel;
-import com.svyter.spring.swimingbysvyter.model.InventoryModel;
+import com.svyter.spring.swimingbysvyter.dto.InventoriesDTO;
+import com.svyter.spring.swimingbysvyter.dto.InventoryDTO;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Validated
@@ -21,10 +19,10 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
     @PostMapping()
-    public ResponseEntity createInventory(@RequestBody InventoryModel inventoryModel)
+    public ResponseEntity createInventory(@RequestBody InventoryDTO inventoryDTO)
     {
         try {
-            inventoryService.createInventory(inventoryModel);
+            inventoryService.createInventory(inventoryDTO);
             return ResponseEntity.ok().body(HttpStatus.CREATED);
 
         }
@@ -57,11 +55,11 @@ public class InventoryController {
         }
     }
     @PutMapping("/{id}")
-    public ResponseEntity editInventory(@RequestBody InventoryModel inventoryModel
+    public ResponseEntity editInventory(@RequestBody InventoryDTO inventoryDTO
                                         ,@PathVariable Long id)
     {
         try {
-            inventoryService.editInventory(inventoryModel,id);
+            inventoryService.editInventory(inventoryDTO,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -83,10 +81,10 @@ public class InventoryController {
     }
 
     @PutMapping("/set/{id}")
-    public ResponseEntity setInventory(@RequestBody InventoriesModel inventoriesModel, @PathVariable Long id)
+    public ResponseEntity setInventory(@RequestBody InventoriesDTO inventoriesDTO, @PathVariable Long id)
     {
         try {
-            inventoryService.setInventory(inventoriesModel,id);
+            inventoryService.setInventory(inventoriesDTO,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)

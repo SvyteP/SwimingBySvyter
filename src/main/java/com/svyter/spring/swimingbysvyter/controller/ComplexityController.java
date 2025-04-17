@@ -1,6 +1,6 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.model.ComplexityModel;
+import com.svyter.spring.swimingbysvyter.dto.ComplexityDTO;
 import com.svyter.spring.swimingbysvyter.service.ComplexityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +18,10 @@ public class ComplexityController {
         this.complexityService = complexityService;
     }
     @PostMapping
-    public ResponseEntity createComplexity (@RequestBody ComplexityModel complexityModel)
+    public ResponseEntity createComplexity (@RequestBody ComplexityDTO complexityDTO)
     {
         try {
-            complexityService.createComplexity(complexityModel);
+            complexityService.createComplexity(complexityDTO);
             return ResponseEntity.ok().body(HttpStatus.CREATED);
         }
         catch (Exception e)
@@ -52,10 +52,10 @@ public class ComplexityController {
         }
     }
     @PutMapping("{id}")
-    public ResponseEntity updateComplexity(@RequestBody ComplexityModel complexityModel,
+    public ResponseEntity updateComplexity(@RequestBody ComplexityDTO complexityDTO,
                                            @PathVariable Long id){
         try {
-            complexityService.editComplexity(complexityModel,id);
+            complexityService.editComplexity(complexityDTO,id);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)

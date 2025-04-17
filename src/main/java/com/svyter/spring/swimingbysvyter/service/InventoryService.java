@@ -1,15 +1,15 @@
 package com.svyter.spring.swimingbysvyter.service;
 
-import com.svyter.spring.swimingbysvyter.model.InventoriesModel;
-import com.svyter.spring.swimingbysvyter.model.InventoryModel;
+import com.svyter.spring.swimingbysvyter.dto.InventoriesDTO;
+import com.svyter.spring.swimingbysvyter.dto.InventoryDTO;
 
 import java.util.List;
 
 public interface InventoryService {
-    void createInventory(InventoryModel inventoryModel);
-    List<InventoryModel> readInventories();
-    InventoryModel readInventory(Long id);
-    void editInventory(InventoryModel inventoryModel,Long id);
+    void createInventory(InventoryDTO inventoryDTO);
+    List<InventoryDTO> readInventories();
+    InventoryDTO readInventory(Long id);
+    void editInventory(InventoryDTO inventoryDTO, Long id);
     void delInventory(Long id);
-    void setInventory(InventoriesModel inventoriesModel, Long id);
+    void setInventory(InventoriesDTO inventoriesDTO, Long id);
 }

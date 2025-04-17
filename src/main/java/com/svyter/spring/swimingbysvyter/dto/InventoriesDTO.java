@@ -1,4 +1,4 @@
-package com.svyter.spring.swimingbysvyter.model;
+package com.svyter.spring.swimingbysvyter.dto;
 
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import lombok.Data;
@@ -6,21 +6,21 @@ import lombok.Data;
 import java.util.ArrayList;
 
 @Data
-public class InventoriesModel {
+public class InventoriesDTO {
     private ArrayList<Long> inventoriesId;
 
-    public InventoriesModel() {
+    public InventoriesDTO() {
     }
 
-    public InventoriesModel(ArrayList<Long> inventoriesId) {
+    public InventoriesDTO(ArrayList<Long> inventoriesId) {
         this.inventoriesId = inventoriesId;
     }
 
-    public static InventoriesModel convertToModel(ArrayList<Inventory> inventories)
+    public static InventoriesDTO convertToModel(ArrayList<Inventory> inventories)
     {
         ArrayList<Long> inventoriesId = new ArrayList<>();
         inventories.forEach(inventory -> inventoriesId.add(inventory.getId()));
-        return new InventoriesModel(inventoriesId);
+        return new InventoriesDTO(inventoriesId);
     }
 
 }
