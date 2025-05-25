@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.dto;
 
+import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import com.svyter.spring.swimingbysvyter.entity.Trainings;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Data
 @Component
-public class TrainingsDTO {
+public class TrainingsDTO implements DTO {
     @NotBlank
     private String name;
     @NotBlank

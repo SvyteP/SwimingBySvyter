@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.zip.DataFormatException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,6 +24,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> dataAlreadyExistException(Exception e) {
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(e.getMessage(), getStackTrace(e));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<ErrorResponseDTO> ThrowableException(Exception e) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(e.getMessage(), getStackTrace(e));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDTO);
     }
 
 

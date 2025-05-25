@@ -1,10 +1,11 @@
 package com.svyter.spring.swimingbysvyter.dto;
 
+import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import lombok.Data;
 
 @Data
-public class InventoryDTO {
+public class InventoryDTO implements DTO {
     private String name;
 
     public InventoryDTO() {
@@ -16,8 +17,7 @@ public class InventoryDTO {
 
     public static InventoryDTO convertToModel(Inventory inventory)
     {
-        InventoryDTO inventoryDTO = new InventoryDTO(inventory.getName());
-        return inventoryDTO;
+        return new InventoryDTO(inventory.getName());
     }
 
 }

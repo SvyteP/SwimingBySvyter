@@ -1,9 +1,11 @@
 package com.svyter.spring.swimingbysvyter.dto.base;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import lombok.Data;
 
-public class ResponseDTO <T>{
+import java.time.LocalDateTime;
+
+@Data
+public class ResponseDTO <T> implements DTO{
     private T data;
     private LocalDateTime dateTime;
 

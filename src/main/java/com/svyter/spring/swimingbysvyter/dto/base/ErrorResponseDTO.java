@@ -1,8 +1,10 @@
 package com.svyter.spring.swimingbysvyter.dto.base;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 
-public class ErrorResponseDTO {
+import java.time.LocalDateTime;
+@Data
+public class ErrorResponseDTO implements DTO {
     private String message;
     private String stackTrace;
     private LocalDateTime dateTime;

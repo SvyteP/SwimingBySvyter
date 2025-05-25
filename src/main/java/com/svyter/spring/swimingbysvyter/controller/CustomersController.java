@@ -56,16 +56,13 @@ public class CustomersController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @PutMapping("/pass")
     public ResponseEntity editPass(@Valid @RequestBody CustomersEditPassDTO customersEditPassDTO){
-        try {
             customersService.editPass(customersEditPassDTO.getEmail(), customersEditPassDTO.getPass());
             return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
+
     @GetMapping("/{id}")
     public ResponseEntity getCustomer(@PathVariable Long id){
         try {

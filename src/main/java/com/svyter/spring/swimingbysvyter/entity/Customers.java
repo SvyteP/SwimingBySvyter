@@ -60,7 +60,7 @@ public class Customers {
                 ", name='" + name + '\'' +
                 ", pass='" + pass + '\'' +
                 ", email='" + email + '\'' +
-                ", categories=" + category +
+                ", categories=" + category.getName() +
                 ", userListTrainings=" + userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel).toList() +
                 ", questioner=" + QuestionerDTO.questionerConvertor(questioner)+
                 ", inventories=" + inventories.stream().map(InventoryDTO::convertToModel).toList() +

@@ -8,6 +8,7 @@ import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +16,7 @@ import java.util.Locale;
 public class CustomersServiceImpl implements CustomersService {
     private final CustomersRepo customersRepo;
     private final MessageSource messageSource;
+
     @Autowired
     public CustomersServiceImpl(CustomersRepo customersRepo, MessageSource messageSource) {
         this.customersRepo = customersRepo;
@@ -42,15 +44,12 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public void delCustomers(Long idForDel, Long idUser) {
         try {
-          if (customersRepo.existsById(idForDel)){
-              customersRepo.deleteById(idForDel);
-          }
-          else {
-              throw new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " + idForDel));
-          }
-        }
-        catch (Exception e)
-        {
+            if (customersRepo.existsById(idForDel)) {
+                customersRepo.deleteById(idForDel);
+            } else {
+                throw new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + idForDel));
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -59,39 +58,30 @@ public class CustomersServiceImpl implements CustomersService {
     public void editLogin(Long id, String login) {
         try {
             Customers customers = customersRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
-                    String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " +id)
+                    String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id)
             ));
             customers.setName(login);
             customersRepo.save(customers);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public void editPass(String email, String pass) {
-        try {
-            Customers customers = customersRepo.findByEmail(email)
-                    .orElseThrow(() -> new NotFoundDataException(
-                            String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"email " + email)
-                    ));
-            customers.setPass(pass);
-            customersRepo.save(customers);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
+        Customers customers = customersRepo.findByEmail(email)
+                .orElseThrow(() -> new NotFoundDataException(
+                        String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "email " + email)
+                ));
+        customers.setPass(pass);
+        customersRepo.save(customers);
     }
 
     @Override
     public List<CustomersGetDTO> getCustomers() {
         try {
-            return  customersRepo.findAll().stream().map(CustomersGetDTO::convertCustomersToModel).toList();
-        }
-        catch (Exception e)
-        {
+            return customersRepo.findAll().stream().map(CustomersGetDTO::convertCustomersToModel).toList();
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
 
@@ -101,11 +91,9 @@ public class CustomersServiceImpl implements CustomersService {
     public CustomersGetDTO getCustomer(Long id) {
         try {
             return CustomersGetDTO.convertCustomersToModel(customersRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
-                    String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " +id)
+                    String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id)
             )));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }

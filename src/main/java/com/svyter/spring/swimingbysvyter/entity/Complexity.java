@@ -30,4 +30,14 @@ public class Complexity {
         this.name = name;
         this.trainings = trainings;
     }
+
+    @Override
+    public String toString() {
+        return "Complexity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", questioners=" + questioners +
+                ", trainings=" + trainings +
+                '}';
+    }
 }

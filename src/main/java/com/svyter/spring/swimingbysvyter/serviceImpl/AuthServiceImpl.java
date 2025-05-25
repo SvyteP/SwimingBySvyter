@@ -2,6 +2,7 @@ package com.svyter.spring.swimingbysvyter.serviceImpl;
 
 import com.svyter.spring.swimingbysvyter.dto.CustomerLoginDTO;
 import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
+import com.svyter.spring.swimingbysvyter.dto.CustomersGetWithTokenDTO;
 import com.svyter.spring.swimingbysvyter.dto.CustomersRegDTO;
 import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 import com.svyter.spring.swimingbysvyter.exception.DataAlreadyExistException;
@@ -29,15 +30,15 @@ public class AuthServiceImpl implements AuthServices {
     }
 
     @Override
-    public ResponseDTO<CustomersGetDTO> registrationCustomer(CustomersRegDTO regModel) {
+    public ResponseDTO<CustomersGetWithTokenDTO> registrationCustomer(CustomersRegDTO regModel) {
         try {
             if (!customersRepo.existsAllByEmail(regModel.getEmail())) {
                 Customers customers = new Customers(regModel.getLogin(),
                         regModel.getPass(),
                         regModel.getEmail());
-                CustomersGetDTO customersGetDTO = CustomersGetDTO.convertCustomersToModel(customers);
+                CustomersGetWithTokenDTO customersGetWithTokenDTO = CustomersGetWithTokenDTO.convertCustomersToModel(customers,"token");
                 customersRepo.save(customers);
-                return new ResponseDTO<>(customersGetDTO);
+                return new ResponseDTO<>(customersGetWithTokenDTO);
             } else {
                 throw new DataAlreadyExistException(String.format(
                         messageSource.getMessage("error.customer.already.exist", null, Locale.getDefault()),regModel.getEmail()
@@ -54,7 +55,7 @@ public class AuthServiceImpl implements AuthServices {
     }
 
     @Override
-    public ResponseDTO<CustomersGetDTO> login(CustomerLoginDTO customerLoginDTO) {
+    public ResponseDTO<CustomersGetWithTokenDTO> login(CustomerLoginDTO customerLoginDTO) {
         Base64.Decoder decoder = Base64.getDecoder();
         // В качестве логина используется почта
         String login = new String(decoder.decode(customerLoginDTO.getLogin()), StandardCharsets.UTF_8);
@@ -66,8 +67,8 @@ public class AuthServiceImpl implements AuthServices {
                         String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "login: " + login)
                 ));
 
-        CustomersGetDTO customersGetDTO = CustomersGetDTO.convertCustomersToModel(customers);
+        CustomersGetWithTokenDTO customersGetWithTokenDTO = CustomersGetWithTokenDTO.convertCustomersToModel(customers,"token");
 
-        return new ResponseDTO<>(customersGetDTO);
+        return new ResponseDTO<>(customersGetWithTokenDTO);
     }
 }

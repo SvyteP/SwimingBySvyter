@@ -18,10 +18,11 @@ public class QuestionerController {
         this.questionerService = questionerService;
     }
 
-    @PostMapping
-    public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO){
+    @PostMapping("/{customerId}")
+    public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO,
+                                           @PathVariable long customerId){
         try {
-            questionerService.createQuestioner(questionerDTO);
+            questionerService.createQuestioner(questionerDTO,customerId);
             return ResponseEntity.ok().body(HttpStatus.OK);
         }
         catch (Exception e)
@@ -34,20 +35,20 @@ public class QuestionerController {
     public ResponseEntity editQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO,
                                          @PathVariable Long id){
         try {
-            questionerService.editQuestioner(questionerDTO,id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
+
+            return ResponseEntity.ok().body(questionerService.editQuestioner(questionerDTO,id));
         }
         catch (Exception e)
         {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @GetMapping("/{id}")
     public ResponseEntity readQuestioner(@PathVariable Long id)
     {
         try {
-
-            return ResponseEntity.ok().body( questionerService.getQuestioner(id));
+            return ResponseEntity.ok().body(questionerService.getQuestioner(id));
         }
         catch (Exception e)
         {

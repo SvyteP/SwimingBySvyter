@@ -1,10 +1,11 @@
 package com.svyter.spring.swimingbysvyter.dto;
 
+import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.entity.UserTrainings;
 import lombok.Data;
 
 @Data
-public class UserListTrainingsGetDTO {
+public class UserListTrainingsGetDTO implements DTO {
     private CustomersGetDTO customersGetDTO;
     private TrainingsDTO trainingsDTO;
     private boolean likeTrain;

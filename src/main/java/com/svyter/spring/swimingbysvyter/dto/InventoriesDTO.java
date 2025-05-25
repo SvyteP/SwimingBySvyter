@@ -1,12 +1,13 @@
 package com.svyter.spring.swimingbysvyter.dto;
 
+import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import lombok.Data;
 
 import java.util.ArrayList;
 
 @Data
-public class InventoriesDTO {
+public class InventoriesDTO implements DTO {
     private ArrayList<Long> inventoriesId;
 
     public InventoriesDTO() {

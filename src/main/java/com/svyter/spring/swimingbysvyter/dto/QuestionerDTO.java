@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.dto;
 
+import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
 
 import lombok.Data;
@@ -8,16 +9,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 @Data
-public class QuestionerDTO {
-    private Long idCustomer;
+public class QuestionerDTO implements DTO {
     @Positive(message = "This is a required field!")
-    private int langthPool;
+    private int lengthPool;
     @NotBlank(message = "This is a required field!")
     private String gender;
     @Positive(message = "This is a required field!")
     private int age;
     @NotBlank(message = "This is a required field!")
-    private String complexityTrain; // complexity, сложность тренировки
+    private ComplexityDTO complexity; // complexity, сложность тренировки
     @Positive(message = "This is a required field!")
     private int timeTrain; // время тренировки
     @Positive(message = "This is a required field!")
@@ -30,12 +30,11 @@ public class QuestionerDTO {
     }
 
 
-    public QuestionerDTO(Long idCustomer, int langthPool, String gender, int age, String complexityTrain, int timeTrain, int countWeek, int countTrainOneWeek) {
-        this.idCustomer = idCustomer;
-        this.langthPool = langthPool;
+    public QuestionerDTO(int lengthPool, String gender, int age, ComplexityDTO complexityDTO, int timeTrain, int countWeek, int countTrainOneWeek) {
+        this.lengthPool = lengthPool;
         this.gender = gender;
         this.age = age;
-        this.complexityTrain = complexityTrain;
+        this.complexity = complexityDTO;
         this.timeTrain = timeTrain;
         this.countWeek = countWeek;
         this.countTrainOneWeek = countTrainOneWeek;
@@ -45,10 +44,23 @@ public class QuestionerDTO {
         if (questioner == null)
             return null;
 
-        QuestionerDTO questionerDTO = new QuestionerDTO(questioner.getCustomers().getId(),questioner.getLengthPool(),questioner.getGender(),
-                                                questioner.getAge(),questioner.getLevelTrain(),
+        QuestionerDTO questionerDTO = new QuestionerDTO(questioner.getLengthPool(),questioner.getGender(),
+                                                questioner.getAge(),ComplexityDTO.convertToModel(questioner.getComplexity()),
                                                 questioner.getTimeTrain(),questioner.getCountWeek(),
-                                                questioner.getCountTrainOneWeek());
+                                                questioner.getCountTrainOneWeek() );
         return questionerDTO;
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionerDTO{" +
+                ", lengthPool=" + lengthPool +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", complexityTrain='" + complexity + '\'' +
+                ", timeTrain=" + timeTrain +
+                ", countWeek=" + countWeek +
+                ", countTrainOneWeek=" + countTrainOneWeek +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.entity;
 
+import com.svyter.spring.swimingbysvyter.dto.ComplexityDTO;
 import jakarta.persistence.*;
 
 import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
@@ -19,9 +20,6 @@ public class Questioner {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "level_train")
-    private String levelTrain;
-
     @Column(name = "time_train")
     private int timeTrain;
     @Column(name = "count_week")
@@ -39,11 +37,10 @@ public class Questioner {
     public Questioner() {
     }
 
-    public Questioner(int langthPool, String gender, int age, String levelTrain, int timeTrain, int countWeek, int countTrainOneWeek, Customers customers) {
+    public Questioner(int langthPool, String gender, int age, int timeTrain, int countWeek, int countTrainOneWeek, Customers customers) {
         this.lengthPool = langthPool;
         this.gender = gender;
         this.age = age;
-        this.levelTrain = levelTrain;
         this.timeTrain = timeTrain;
         this.countWeek = countWeek;
         this.countTrainOneWeek = countTrainOneWeek;
@@ -57,7 +54,7 @@ public class Questioner {
                 ", langthPool=" + lengthPool +
                 ", gender='" + gender + '\'' +
                 ", age=" + age +
-                ", levelTrain='" + levelTrain + '\'' +
+                ", complexity='" + ComplexityDTO.convertToModel(complexity) + '\'' +
                 ", timeTrain=" + timeTrain +
                 ", countWeek=" + countWeek +
                 ", countTrainOneWeek=" + countTrainOneWeek +
