@@ -7,124 +7,71 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("listTrainings")
+@RequestMapping("customer/trainings")
 public class UserListTrainingsController {
     private final UserListTrainingsService userListTrainingsService;
+
     @Autowired
     public UserListTrainingsController(UserListTrainingsService userListTrainingsService) {
         this.userListTrainingsService = userListTrainingsService;
     }
+
     // Подбор тренировок
-    @PostMapping("/{idCustomers}")
-    public ResponseEntity generateTrainings(@PathVariable Long idCustomers)
-    {
-        try {
-            userListTrainingsService.createUserTraining(idCustomers);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity generateTrainings(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(userListTrainingsService.createUserTraining(token));
     }
+
     // Вывод списка всех тренировок, которые были подобраны пользователям
-    @GetMapping
-    public ResponseEntity getAllCustomersListTrainings()
-    {
-        try {
-            return ResponseEntity.ok().body(userListTrainingsService.readAllUserTrainings());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    @GetMapping("/admin/all")
+    public ResponseEntity getAllCustomersListTrainings() {
+        return ResponseEntity.ok().body(userListTrainingsService.getAllUserTrainings());
     }
+
     // Вывод всех тренировок 1-го пользователя
-    @GetMapping("/{idCustomers}")
-    public ResponseEntity getAllForCustomers(@PathVariable Long idCustomers)
-    {
-        try {
-            return ResponseEntity.ok().body(userListTrainingsService.readUserTrainings(idCustomers));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    @GetMapping("/all/user")
+    public ResponseEntity getAllForCustomers(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(userListTrainingsService.getUserTrainings(token));
     }
+
     // Вывод конкретной тренировки по id-тренировки
     @GetMapping("/one/{userTrainingId}")
-    public ResponseEntity getOneUserListTrainings(@PathVariable Long userTrainingId)
-    {
-        try {
-            return ResponseEntity.ok().body(userListTrainingsService.readOneUserTraining(userTrainingId));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    public ResponseEntity getOneUserListTrainings(@PathVariable Long userTrainingId) {
+        return ResponseEntity.ok().body(userListTrainingsService.getOneUserTraining(userTrainingId));
     }
-    // Удаление подобранной тренировки(по id-пользователя и id-тренировки)
+
+    // Удаление подобранной тренировки(по id-подобранной тренировки)
     @DeleteMapping("/{userTrainingId}")
-    public ResponseEntity deleteOneUserListTrainings(@PathVariable Long userTrainingId)
-    {
-        try {
-            userListTrainingsService.deleteUserTraining(userTrainingId);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    public ResponseEntity deleteOneUserListTrainings(@PathVariable Long userTrainingId) {
+        userListTrainingsService.deleteUserTraining(userTrainingId);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
     @PutMapping("/like/{userTrainingId}")
     public ResponseEntity isLikeTraining(@PathVariable Long userTrainingId,
-                                             @RequestParam boolean isLike)
-    {
-        try {
-            userListTrainingsService.isLikeTraining(userTrainingId, isLike);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+                                         @RequestParam boolean isLike) {
+        userListTrainingsService.isLikeTraining(userTrainingId, isLike);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
+
     @PutMapping("/complete/{userTrainingId}")
     public ResponseEntity isCompliteTraining(@PathVariable Long userTrainingId,
-                                             @RequestParam boolean isCompl)
-    {
-        try {
-            userListTrainingsService.isCompliteTraining(userTrainingId,isCompl);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+                                             @RequestParam boolean isCompl) {
+        userListTrainingsService.isCompliteTraining(userTrainingId, isCompl);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
-    @GetMapping("/complete/{customersId}")
-    public ResponseEntity complitedTrainingsList(@PathVariable Long customersId)
-    {
+
+    @GetMapping("/complete")
+    public ResponseEntity complitedTrainingsList(@RequestHeader(value = "Authorization") String token) {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.isComplitedUserTraining(customersId));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-    @GetMapping("/like/{customersId}")
-    public ResponseEntity likeTrainingsList(@PathVariable Long customersId)
-    {
-        try {
-            return ResponseEntity.ok().body(userListTrainingsService.isLikeUserTraining(customersId));
-        }
-        catch (Exception e)
-        {
+            return ResponseEntity.ok().body(userListTrainingsService.isComplitedUserTraining(token));
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-
+    @GetMapping("/like")
+    public ResponseEntity likeTrainingsList(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(userListTrainingsService.isLikeUserTraining(token));
+    }
 }

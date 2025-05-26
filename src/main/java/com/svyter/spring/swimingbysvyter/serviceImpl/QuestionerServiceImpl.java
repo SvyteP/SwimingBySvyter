@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
+import com.svyter.spring.swimingbysvyter.dto.QuestionerEditDTO;
 import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 import com.svyter.spring.swimingbysvyter.entity.Complexity;
 import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
@@ -9,6 +10,7 @@ import com.svyter.spring.swimingbysvyter.repo.QuestionerRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
 import com.svyter.spring.swimingbysvyter.dto.QuestionerDTO;
+import com.svyter.spring.swimingbysvyter.security.JwtUtils;
 import com.svyter.spring.swimingbysvyter.service.QuestionerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,85 +24,68 @@ public class QuestionerServiceImpl implements QuestionerService {
     private final CustomersRepo customersRepo;
     private final ComplexityRepo complexityRepo;
     private final MessageSource messageSource;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public QuestionerServiceImpl(QuestionerRepo questionerRepo, CustomersRepo customersRepo, ComplexityRepo complexityRepo, MessageSource messageSource) {
+    public QuestionerServiceImpl(QuestionerRepo questionerRepo, CustomersRepo customersRepo, ComplexityRepo complexityRepo, MessageSource messageSource, JwtUtils jwtUtils) {
         this.questionerRepo = questionerRepo;
         this.customersRepo = customersRepo;
         this.complexityRepo = complexityRepo;
         this.messageSource = messageSource;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
-    public void createQuestioner(QuestionerDTO questionerDTO, Long customerId) {
-        try {
-            Customers customers = customersRepo.findById(customerId).orElseThrow(() -> new NotFoundDataException(
-                    String.format(messageSource.getMessage("error.customer.notfound",null, Locale.getDefault()),"id " + customerId)
-            ));
-            Questioner questioner = new Questioner(questionerDTO.getLengthPool(), questionerDTO.getGender(), questionerDTO.getAge(), questionerDTO.getTimeTrain(), questionerDTO.getCountWeek(),
-                    questionerDTO.getCountTrainOneWeek(),
-                    customers);
-            customers.setQuestioner(questioner);
-            questionerRepo.save(questioner);
-            customersRepo.save(customers);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    public void createQuestioner(QuestionerEditDTO questionerEditDTO, String token) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
+                String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id)
+        ));
+        Questioner questioner = new Questioner(questionerEditDTO.getLengthPool(), questionerEditDTO.getGender(), questionerEditDTO.getAge(), questionerEditDTO.getTimeTrain(), questionerEditDTO.getCountWeek(),
+                questionerEditDTO.getCountTrainOneWeek(),
+                customers);
+
+        Complexity complexity = complexityRepo.findById(questionerEditDTO.getComplexityId()).orElseThrow(() -> new NotFoundDataException(
+                messageSource.getMessage("error.complexity.notfound", new Object[]{"id " + id}, Locale.getDefault())
+        ));
+        questioner.setComplexity(complexity);
+        customers.setQuestioner(questioner);
+        questionerRepo.save(questioner);
+        customersRepo.save(customers);
     }
 
     @Override
-    public ResponseDTO<QuestionerDTO> editQuestioner(QuestionerDTO questionerDTO, Long customerId ) {
-        try {
-            Questioner questioner = questionerRepo.findByCustomersId(customerId).orElseThrow(() -> new NotFoundDataException(
-                    String.format(messageSource.getMessage("error.questioner.notfound",null,
-                            Locale.getDefault()),"idCustomers " +customerId)));
+    public ResponseDTO<QuestionerDTO> editQuestioner(QuestionerEditDTO questionerEditDTO, String token) {
+        Long id = jwtUtils.extractUserId(token);
+        Questioner questioner = questionerRepo.findByCustomersId(id).orElseThrow(() -> new NotFoundDataException(
+                messageSource.getMessage("error.questioner.notfound", new Object[]{"id " + id},
+                        Locale.getDefault())));
 
-            Complexity complexity = complexityRepo.findById(questionerDTO.getComplexity().getId()).orElseThrow(() -> new NotFoundDataException(
-                    String.format(messageSource.getMessage("error.questioner.notfound",null,
-                            Locale.getDefault()),"customerId " + customerId)));
+        Complexity complexity = complexityRepo.findById(questionerEditDTO.getComplexityId()).orElseThrow(() -> new NotFoundDataException(
+               messageSource.getMessage("error.complexity.notfound", new Object[]{"id " + id},
+                        Locale.getDefault())));
 
-            questioner.setLengthPool(questionerDTO.getLengthPool());
-            questioner.setGender(questionerDTO.getGender());
-            questioner.setAge(questionerDTO.getAge());
-            questioner.setComplexity(complexity);
-            questioner.setTimeTrain(questionerDTO.getTimeTrain());
-            questioner.setCountWeek(questionerDTO.getCountWeek());
-            questioner.setCountTrainOneWeek(questionerDTO.getCountTrainOneWeek());
-            questionerRepo.save(questioner);
-            return new ResponseDTO<>(QuestionerDTO.questionerConvertor(questioner));
-        }
-        catch (Exception e)
-        {
-            throw  new RuntimeException(e.getMessage());
-        }
-
+        questioner.setLengthPool(questionerEditDTO.getLengthPool());
+        questioner.setGender(questionerEditDTO.getGender());
+        questioner.setAge(questionerEditDTO.getAge());
+        questioner.setComplexity(complexity);
+        questioner.setTimeTrain(questionerEditDTO.getTimeTrain());
+        questioner.setCountWeek(questionerEditDTO.getCountWeek());
+        questioner.setCountTrainOneWeek(questionerEditDTO.getCountTrainOneWeek());
+        questionerRepo.save(questioner);
+        return new ResponseDTO<>(QuestionerDTO.questionerConvertor(questioner));
     }
 
     @Override
-    public ResponseDTO<QuestionerDTO> getQuestioner(Long customerId) {
-        try {
-           return new ResponseDTO<>(QuestionerDTO.questionerConvertor(questionerRepo.findByCustomersId(customerId).orElseThrow(() -> new NotFoundDataException(
-                   String.format(messageSource.getMessage("error.questioner.notfound",null, Locale.getDefault()),"idCustomers " +customerId)
-           ))));
-        }
-        catch (Exception e)
-        {
-            throw  new RuntimeException(e.getMessage());
-        }
-
+    public ResponseDTO<QuestionerDTO> getQuestioner(String token) {
+        Long id = jwtUtils.extractUserId(token);
+        return new ResponseDTO<>(QuestionerDTO.questionerConvertor(questionerRepo.findByCustomersId(id).orElseThrow(() -> new NotFoundDataException(
+                String.format(messageSource.getMessage("error.questioner.notfound", null, Locale.getDefault()), "idCustomers " + id)
+        ))));
     }
 
     @Override
     public void delQuestioner(Long idQuest) {
-        try {
-           questionerRepo.deleteById(idQuest);
-        }
-        catch (Exception e)
-        {
-            throw  new RuntimeException(e.getMessage());
-        }
-
+        questionerRepo.deleteById(idQuest);
     }
 }

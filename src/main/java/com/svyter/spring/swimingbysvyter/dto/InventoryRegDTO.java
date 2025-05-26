@@ -5,19 +5,19 @@ import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import lombok.Data;
 
 @Data
-public class InventoryDTO implements DTO {
+public class InventoryRegDTO implements DTO {
     private String name;
 
-    public InventoryDTO() {
+    public InventoryRegDTO() {
     }
 
-    public InventoryDTO(String name) {
+    public InventoryRegDTO(String name) {
         this.name = name;
     }
 
-    public static InventoryDTO convertToModel(Inventory inventory)
+    public static InventoryRegDTO convertToModel(Inventory inventory)
     {
-        return new InventoryDTO(inventory.getName());
+        return new InventoryRegDTO(inventory.getName());
     }
 
 }

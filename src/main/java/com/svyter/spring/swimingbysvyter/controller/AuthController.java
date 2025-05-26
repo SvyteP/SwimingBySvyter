@@ -3,6 +3,7 @@ package com.svyter.spring.swimingbysvyter.controller;
 import com.svyter.spring.swimingbysvyter.dto.CustomerLoginDTO;
 import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
 import com.svyter.spring.swimingbysvyter.dto.CustomersGetWithTokenDTO;
+import com.svyter.spring.swimingbysvyter.dto.CustomersRegDTO;
 import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 import com.svyter.spring.swimingbysvyter.service.AuthServices;
@@ -24,5 +25,10 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<CustomersGetWithTokenDTO>> login(@RequestBody CustomerLoginDTO customerLoginDTO) {
             ResponseDTO<CustomersGetWithTokenDTO> response = authServices.login(customerLoginDTO);
             return ResponseEntity.ok().body(response);
+    }
+    @PostMapping("/reg")
+    public ResponseEntity<ResponseDTO<CustomersGetWithTokenDTO>> registration(@RequestBody CustomersRegDTO customersRegDTO) {
+        ResponseDTO<CustomersGetWithTokenDTO> response = authServices.registrationCustomer(customersRegDTO);
+        return ResponseEntity.ok().body(response);
     }
 }

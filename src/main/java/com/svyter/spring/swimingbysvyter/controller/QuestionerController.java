@@ -1,6 +1,7 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
 import com.svyter.spring.swimingbysvyter.dto.QuestionerDTO;
+import com.svyter.spring.swimingbysvyter.dto.QuestionerEditDTO;
 import com.svyter.spring.swimingbysvyter.service.QuestionerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,58 +14,33 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/questioner")
 public class QuestionerController {
     private QuestionerService questionerService;
+
     @Autowired
     public QuestionerController(QuestionerService questionerService) {
         this.questionerService = questionerService;
     }
 
-    @PostMapping("/{customerId}")
-    public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO,
-                                           @PathVariable long customerId){
-        try {
-            questionerService.createQuestioner(questionerDTO,customerId);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity createQuestioner(@Validated @RequestBody QuestionerEditDTO questionerEditDTO,
+                                           @RequestHeader(value = "Authorization") String token) {
+        questionerService.createQuestioner(questionerEditDTO, token);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity editQuestioner(@Validated @RequestBody QuestionerDTO questionerDTO,
-                                         @PathVariable Long id){
-        try {
-
-            return ResponseEntity.ok().body(questionerService.editQuestioner(questionerDTO,id));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PutMapping
+    public ResponseEntity editQuestioner(@Validated @RequestBody QuestionerEditDTO questionerEditDTO,
+                                         @RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(questionerService.editQuestioner(questionerEditDTO, token));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity readQuestioner(@PathVariable Long id)
-    {
-        try {
-            return ResponseEntity.ok().body(questionerService.getQuestioner(id));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping
+    public ResponseEntity readQuestioner(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(questionerService.getQuestioner(token));
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity delQuestioner(@PathVariable Long id)
-    {
-        try {
-            questionerService.delQuestioner(id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity delQuestioner(@PathVariable Long id) {
+        questionerService.delQuestioner(id);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 }

@@ -17,6 +17,7 @@ public class ComplexityDTO implements DTO {
         this.id = id;
     }
     public static ComplexityDTO convertToModel(Complexity complexity){
+        if (complexity == null) return null;
         return new ComplexityDTO(complexity.getName(),complexity.getId());
     }
 }

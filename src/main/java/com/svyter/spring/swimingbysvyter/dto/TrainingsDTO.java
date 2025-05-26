@@ -21,17 +21,17 @@ public class TrainingsDTO implements DTO {
     @NotBlank
     private String hitch;
 
-    private List<Long> inventories;
+    private List<InventoryDto> inventories;
 
     @NotBlank
-    private String complexity;
+    private ComplexityDTO complexity;
 
 
     public TrainingsDTO() {
     }
 
 
-    public TrainingsDTO(String name, String warmUp, String mainTraining, String hitch, List<Long> inventories, String complexity) {
+    public TrainingsDTO(String name, String warmUp, String mainTraining, String hitch, List<InventoryDto> inventories, ComplexityDTO complexity) {
         this.name = name;
         this.warmUp = warmUp;
         this.mainTraining = mainTraining;
@@ -45,10 +45,8 @@ public class TrainingsDTO implements DTO {
         TrainingsDTO trainingsDTO = new TrainingsDTO(trainings.getName(),trainings.getWarmUp(),
                                                             trainings.getMainTraining(), trainings.getHitch()
                                                             ,trainings.getInventories().stream().
-                                                                    map(Inventory::getId).toList(),
-                                                            trainings.getComplexity().getName()
-
-                );
+                                                                    map(InventoryDto::convertToModel).toList(),
+                                                            ComplexityDTO.convertToModel(trainings.getComplexity()));
         return trainingsDTO;
     }
 }

@@ -1,7 +1,7 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
 import com.svyter.spring.swimingbysvyter.dto.InventoriesDTO;
-import com.svyter.spring.swimingbysvyter.dto.InventoryDTO;
+import com.svyter.spring.swimingbysvyter.dto.InventoryRegDTO;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,84 +14,47 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/inventory")
 public class InventoryController {
     private final InventoryService inventoryService;
+
     @Autowired
     public InventoryController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
+
     @PostMapping()
-    public ResponseEntity createInventory(@RequestBody InventoryDTO inventoryDTO)
-    {
-        try {
-            inventoryService.createInventory(inventoryDTO);
-            return ResponseEntity.ok().body(HttpStatus.CREATED);
-
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity createInventory(@RequestBody InventoryRegDTO inventoryRegDTO) {
+        inventoryService.createInventory(inventoryRegDTO);
+        return ResponseEntity.ok().body(HttpStatus.CREATED);
     }
+
     @GetMapping
-    public ResponseEntity readInventories()
-    {
-        try {
-            return ResponseEntity.ok().body(inventoryService.readInventories());
+    public ResponseEntity getInventories(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(inventoryService.getInventories(token));
+    }
 
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/{idInv}")
+    public ResponseEntity getInventory(@RequestHeader(value = "Authorization") String token,
+                                       @PathVariable Long idInv) {
+        return ResponseEntity.ok().body(inventoryService.getInventory(token, idInv));
     }
-    @GetMapping("/{id}")
-    public ResponseEntity readInventory(@PathVariable Long id)
-    {
-        try {
-            return ResponseEntity.ok().body(inventoryService.readInventory(id));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+
     @PutMapping("/{id}")
-    public ResponseEntity editInventory(@RequestBody InventoryDTO inventoryDTO
-                                        ,@PathVariable Long id)
-    {
-        try {
-            inventoryService.editInventory(inventoryDTO,id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity editInventory(@RequestBody InventoryRegDTO inventoryRegDTO
+            , @PathVariable Long id) {
+        inventoryService.editInventory(inventoryRegDTO, id);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity delInventory(@PathVariable Long id)
-    {
-        try {
-            inventoryService.delInventory(id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity delInventory(@PathVariable Long id) {
+        inventoryService.delInventory(id);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
-    @PutMapping("/set/{id}")
-    public ResponseEntity setInventory(@RequestBody InventoriesDTO inventoriesDTO, @PathVariable Long id)
-    {
-        try {
-            inventoryService.setInventory(inventoriesDTO,id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PutMapping("/set")
+    public ResponseEntity setInventory(@RequestBody InventoriesDTO inventoriesDTO,
+                                       @RequestHeader(value = "Authorization") String token) {
+        inventoryService.setInventory(inventoriesDTO, token);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
-
 
 }

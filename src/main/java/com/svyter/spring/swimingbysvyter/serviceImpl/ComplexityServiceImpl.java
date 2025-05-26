@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
+import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 import com.svyter.spring.swimingbysvyter.exception.DataAlreadyExistException;
 import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
 import com.svyter.spring.swimingbysvyter.repo.ComplexityRepo;
@@ -28,61 +29,39 @@ public class ComplexityServiceImpl implements ComplexityService {
 
     @Override
     public void createComplexity(ComplexityDTO complexityDTO) {
-        try {
-            if (complexityRepo.existsByName(complexityDTO.getName())) {
-                throw new DataAlreadyExistException(
-                        String.format(messageSource.getMessage("error.complexity.already.exist", null, Locale.getDefault()), "name: " + complexityDTO.getName())
-                );
-            }
-            complexityRepo.save(new Complexity(complexityDTO.getName()));
-
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        if (complexityRepo.existsByName(complexityDTO.getName())) {
+            throw new DataAlreadyExistException(
+                    String.format(messageSource.getMessage("error.complexity.already.exist", null, Locale.getDefault()), "name: " + complexityDTO.getName())
+            );
         }
+        complexityRepo.save(new Complexity(complexityDTO.getName()));
     }
 
     @Override
-    public List<ComplexityDTO> readComplexities() {
-        try {
-            return complexityRepo.findAll().stream().map(ComplexityDTO::convertToModel).toList(); //Изменить!
-
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public  ResponseDTO<List<ComplexityDTO>> readComplexities() {
+        return new ResponseDTO<>(complexityRepo.findAll().stream().map(ComplexityDTO::convertToModel).toList()); //Изменить!
     }
 
     @Override
-    public ComplexityDTO readComplexity(Long id) {
-        try {
-            return ComplexityDTO.convertToModel(complexityRepo.findById(id)
-                    .orElseThrow(() -> new NotFoundDataException(
-                            String.format(messageSource.getMessage("error.complexity.notfound", null, Locale.getDefault()),"id "+ id))
-                    ));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public ResponseDTO<ComplexityDTO> readComplexity(Long id) {
+        return new ResponseDTO<>(ComplexityDTO.convertToModel(complexityRepo.findById(id)
+                .orElseThrow(() -> new NotFoundDataException(
+                        String.format(messageSource.getMessage("error.complexity.notfound", null, Locale.getDefault()), "id " + id))
+                )));
     }
 
     @Override
     public void editComplexity(ComplexityDTO complexityDTO, Long id) {
-        try {
-            Complexity complexity = complexityRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
-                    String.format(messageSource.getMessage("error.complexity.notfound",null,Locale.getDefault()),"id "+ id)
-            ));
-            complexity.setName(complexityDTO.getName());
-            complexityRepo.save(complexity);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
+        Complexity complexity = complexityRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
+                String.format(messageSource.getMessage("error.complexity.notfound", null, Locale.getDefault()), "id " + id)
+        ));
+        complexity.setName(complexityDTO.getName());
+        complexityRepo.save(complexity);
     }
 
     @Override
     public void delComplexity(Long id) {
-        try {
-            complexityRepo.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
+        complexityRepo.deleteById(id);
     }
 }

@@ -9,9 +9,12 @@ import com.svyter.spring.swimingbysvyter.exception.DataAlreadyExistException;
 import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
 import com.svyter.spring.swimingbysvyter.repo.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
+import com.svyter.spring.swimingbysvyter.security.AuthUtils;
 import com.svyter.spring.swimingbysvyter.service.AuthServices;
+import com.svyter.spring.swimingbysvyter.service.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -20,33 +23,27 @@ import java.util.Locale;
 
 @Service
 public class AuthServiceImpl implements AuthServices {
+    private final CustomersService customersService;
+    private final AuthUtils authUtils;
     private final CustomersRepo customersRepo;
     private final MessageSource messageSource;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthServiceImpl(CustomersRepo customersRepo, MessageSource messageSource) {
+    public AuthServiceImpl(CustomersService customersService, AuthUtils authUtils, CustomersRepo customersRepo, MessageSource messageSource, PasswordEncoder passwordEncoder) {
+        this.customersService = customersService;
+        this.authUtils = authUtils;
         this.customersRepo = customersRepo;
         this.messageSource = messageSource;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public ResponseDTO<CustomersGetWithTokenDTO> registrationCustomer(CustomersRegDTO regModel) {
-        try {
-            if (!customersRepo.existsAllByEmail(regModel.getEmail())) {
-                Customers customers = new Customers(regModel.getLogin(),
-                        regModel.getPass(),
-                        regModel.getEmail());
-                CustomersGetWithTokenDTO customersGetWithTokenDTO = CustomersGetWithTokenDTO.convertCustomersToModel(customers,"token");
-                customersRepo.save(customers);
-                return new ResponseDTO<>(customersGetWithTokenDTO);
-            } else {
-                throw new DataAlreadyExistException(String.format(
-                        messageSource.getMessage("error.customer.already.exist", null, Locale.getDefault()),regModel.getEmail()
-                ));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        Customers customer = customersService.createCustomer(regModel);
+        Base64.Decoder decoder = Base64.getDecoder();
+        String password = new String(decoder.decode(regModel.getPass()), StandardCharsets.UTF_8);
+        return authUtils.authenticationUser(customer.getEmail(),password);
     }
 
     @Override
@@ -61,14 +58,6 @@ public class AuthServiceImpl implements AuthServices {
         String login = new String(decoder.decode(customerLoginDTO.getLogin()), StandardCharsets.UTF_8);
         String password = new String(decoder.decode(customerLoginDTO.getPassword()), StandardCharsets.UTF_8);
         /*Аунтификация*/
-
-        Customers customers = customersRepo.findByEmail(login)
-                .orElseThrow(() -> new NotFoundDataException(
-                        String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "login: " + login)
-                ));
-
-        CustomersGetWithTokenDTO customersGetWithTokenDTO = CustomersGetWithTokenDTO.convertCustomersToModel(customers,"token");
-
-        return new ResponseDTO<>(customersGetWithTokenDTO);
+        return authUtils.authenticationUser(login, password);
     }
 }

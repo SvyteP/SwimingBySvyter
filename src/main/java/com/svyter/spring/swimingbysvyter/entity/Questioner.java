@@ -51,10 +51,10 @@ public class Questioner {
     public String toString() {
         return "Questioner{" +
                 "id=" + id +
-                ", langthPool=" + lengthPool +
+                ", lengthPool=" + lengthPool +
                 ", gender='" + gender + '\'' +
                 ", age=" + age +
-                ", complexity='" + ComplexityDTO.convertToModel(complexity) + '\'' +
+                ", complexity='" + ( complexity != null ? ComplexityDTO.convertToModel(complexity).toString() : "null" ) + '\'' +
                 ", timeTrain=" + timeTrain +
                 ", countWeek=" + countWeek +
                 ", countTrainOneWeek=" + countTrainOneWeek +

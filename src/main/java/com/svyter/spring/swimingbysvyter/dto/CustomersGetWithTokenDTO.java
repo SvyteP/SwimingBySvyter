@@ -10,11 +10,11 @@ import java.util.List;
 public class CustomersGetWithTokenDTO implements DTO {
     private String login;
     private String email;
-    private List<InventoryDTO> inventory;
+    private List<InventoryRegDTO> inventory;
     private QuestionerDTO questioner;
     private String token;
 
-    public CustomersGetWithTokenDTO(String login, String email, List<InventoryDTO> inventory, QuestionerDTO questioner, String token) {
+    public CustomersGetWithTokenDTO(String login, String email, List<InventoryRegDTO> inventory, QuestionerDTO questioner, String token) {
         this.login = login;
         this.email = email;
         this.inventory = inventory;
@@ -23,8 +23,9 @@ public class CustomersGetWithTokenDTO implements DTO {
     }
 
     public static CustomersGetWithTokenDTO convertCustomersToModel(Customers customers, String token) {
+        if (customers == null || token == null) return null;
         return new CustomersGetWithTokenDTO (customers.getName(), customers.getEmail(),
-                customers.getInventories().stream().map(InventoryDTO::convertToModel).toList(),
+                customers.getInventories().stream().map(InventoryRegDTO::convertToModel).toList(),
                 QuestionerDTO.questionerConvertor(customers.getQuestioner()),token);
     }
 }

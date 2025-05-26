@@ -2,14 +2,15 @@ package com.svyter.spring.swimingbysvyter.service;
 
 import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
 import com.svyter.spring.swimingbysvyter.dto.CustomersRegDTO;
+import com.svyter.spring.swimingbysvyter.entity.Customers;
 
 import java.util.List;
 
 public interface CustomersService {
-   /* void regCustomers(CustomersRegDTO customersRegDTO);*/
-    void delCustomers(Long idForDel,Long idUser);
-    void editLogin(Long id,String login);
-    void editPass(String email,String pass);
+    Customers createCustomer(CustomersRegDTO customersRegDTO);
+    void delCustomers(Long idForDel);
+    void editLogin(String token,String login);
+    void editPass(String token,String pass);
     List<CustomersGetDTO> getCustomers();
-    CustomersGetDTO getCustomer(Long id);
+    CustomersGetDTO getCustomer(String token);
 }

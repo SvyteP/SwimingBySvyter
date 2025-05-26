@@ -2,20 +2,29 @@ package com.svyter.spring.swimingbysvyter.service;
 
 import com.svyter.spring.swimingbysvyter.dto.TrainingsDTO;
 import com.svyter.spring.swimingbysvyter.dto.UserListTrainingsGetDTO;
+import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 
 
 import java.util.List;
 
 public interface UserListTrainingsService {
-    public void createUserTraining(Long idCustomers);
-    public UserListTrainingsGetDTO readOneUserTraining(Long userTrainingId);
-    public List<UserListTrainingsGetDTO> readUserTrainings(Long idCustomers);
-    public List<UserListTrainingsGetDTO> readAllUserTrainings();
-    public void isLikeTraining(Long userTrainingId,  boolean isLike);
-    public void isCompliteTraining(Long userTrainingId,  boolean isCompl);
-    public void deleteUserTraining(Long userTrainingId);
-    public List<TrainingsDTO> isLikeUserTraining(Long customersId);
-    public List<TrainingsDTO> isComplitedUserTraining(Long customersId);
+    ResponseDTO<List<UserListTrainingsGetDTO>> createUserTraining(String token);
+
+    ResponseDTO<UserListTrainingsGetDTO> getOneUserTraining(Long userTrainingId);
+
+    ResponseDTO<List<UserListTrainingsGetDTO>> getUserTrainings(String token);
+
+    ResponseDTO<List<UserListTrainingsGetDTO>> getAllUserTrainings();
+
+    void isLikeTraining(Long userTrainingId, boolean isLike);
+
+    void isCompliteTraining(Long userTrainingId, boolean isCompl);
+
+    void deleteUserTraining(Long userTrainingId);
+
+    ResponseDTO<List<TrainingsDTO>> isLikeUserTraining(String token);
+
+    ResponseDTO<List<TrainingsDTO>> isComplitedUserTraining(String token);
 
 
 }

@@ -1,24 +1,21 @@
 package com.svyter.spring.swimingbysvyter.dto;
 
-import com.svyter.spring.swimingbysvyter.dto.base.DTO;
 import com.svyter.spring.swimingbysvyter.entity.Questioner;
-
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-
 @Data
-public class QuestionerDTO implements DTO {
+public class QuestionerEditDTO {
     @Positive(message = "This is a required field!")
     private int lengthPool;
     @NotBlank(message = "This is a required field!")
     private String gender;
     @Positive(message = "This is a required field!")
     private int age;
-    @NotNull(message = "This is a required field!")
-    private ComplexityDTO complexity; // complexity, сложность тренировки
+    @Positive(message = "This is a required field!")
+    private Long complexityId; // complexity, сложность тренировки
     @Positive(message = "This is a required field!")
     private int timeTrain; // время тренировки
     @Positive(message = "This is a required field!")
@@ -27,37 +24,37 @@ public class QuestionerDTO implements DTO {
     private int countTrainOneWeek; // кол-во тренировок в неделю
 
 
-    public QuestionerDTO() {
+    public QuestionerEditDTO() {
     }
 
 
-    public QuestionerDTO(int lengthPool, String gender, int age, ComplexityDTO complexityDTO, int timeTrain, int countWeek, int countTrainOneWeek) {
+    public QuestionerEditDTO(int lengthPool, String gender, int age, Long complexityId, int timeTrain, int countWeek, int countTrainOneWeek) {
         this.lengthPool = lengthPool;
         this.gender = gender;
         this.age = age;
-        this.complexity = complexityDTO;
+        this.complexityId = complexityId;
         this.timeTrain = timeTrain;
         this.countWeek = countWeek;
         this.countTrainOneWeek = countTrainOneWeek;
     }
 
-    public  static QuestionerDTO questionerConvertor(Questioner questioner){
+    public  static QuestionerEditDTO questionerConvertor(Questioner questioner){
         if (questioner == null) return null;
 
-        QuestionerDTO questionerDTO = new QuestionerDTO(questioner.getLengthPool(),questioner.getGender(),
-                                                questioner.getAge(),ComplexityDTO.convertToModel(questioner.getComplexity()),
-                                                questioner.getTimeTrain(),questioner.getCountWeek(),
-                                                questioner.getCountTrainOneWeek() );
+        QuestionerEditDTO questionerDTO = new QuestionerEditDTO(questioner.getLengthPool(),questioner.getGender(),
+                questioner.getAge(),questioner.getId(),
+                questioner.getTimeTrain(),questioner.getCountWeek(),
+                questioner.getCountTrainOneWeek() );
         return questionerDTO;
     }
 
     @Override
     public String toString() {
-        return "QuestionerDTO{" +
+        return "QuestionerEditDTO{" +
                 ", lengthPool=" + lengthPool +
                 ", gender='" + gender + '\'' +
                 ", age=" + age +
-                ", complexityTrain='" + complexity + '\'' +
+                ", complexityTrain='" + complexityId + '\'' +
                 ", timeTrain=" + timeTrain +
                 ", countWeek=" + countWeek +
                 ", countTrainOneWeek=" + countTrainOneWeek +

@@ -9,74 +9,51 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/training")
+@RequestMapping("/training/admin")
 @Validated
 public class TrainingsController {
     private final TrainingsService trainingsService;
+
     @Autowired
     public TrainingsController(TrainingsService trainingsService) {
         this.trainingsService = trainingsService;
     }
 
     @PostMapping
-    public ResponseEntity createTrainings(@RequestBody TrainingsDTO trainingsDTO)
-    {
-        try {
-            trainingsService.createTrain(trainingsDTO);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    public ResponseEntity createTrainings(@RequestBody TrainingsDTO trainingsDTO) {
+        trainingsService.createTrain(trainingsDTO);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity editTrainings(@RequestBody TrainingsDTO trainingsDTO, @PathVariable Long id)
-    {
-        try {
-            trainingsService.editTrainings(trainingsDTO,id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    public ResponseEntity editTrainings(@RequestBody TrainingsDTO trainingsDTO, @PathVariable Long id) {
+        trainingsService.editTrainings(trainingsDTO, id);
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
+
     @GetMapping()
-    public ResponseEntity getTrainings()
-    {
-        try {
-            return ResponseEntity.ok().body(trainingsService.readTrainings());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+    public ResponseEntity getTrainings() {
+        return ResponseEntity.ok().body(trainingsService.readTrainings());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity getTrain(@PathVariable Long id)
-    {
+    public ResponseEntity getTrain(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(trainingsService.readTrain(id));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity delTrain(@PathVariable Long id)
-    {
-        try {
-            trainingsService.delTrainings(id);
-            return ResponseEntity.ok().body(HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delTrain(@PathVariable Long id) {
+        try {
+            trainingsService.delTrainings(id);
+            return ResponseEntity.ok().body(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
 
 }

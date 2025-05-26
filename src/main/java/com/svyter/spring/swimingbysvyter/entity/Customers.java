@@ -2,11 +2,12 @@ package com.svyter.spring.swimingbysvyter.entity;
 
 import jakarta.persistence.*;
 
-import com.svyter.spring.swimingbysvyter.dto.InventoryDTO;
+import com.svyter.spring.swimingbysvyter.dto.InventoryRegDTO;
 import com.svyter.spring.swimingbysvyter.dto.QuestionerDTO;
 import com.svyter.spring.swimingbysvyter.dto.UserListTrainingsGetDTO;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -47,6 +48,8 @@ public class Customers {
         this.name = name;
         this.pass = pass;
         this.email = email;
+        this.userTrainings = new ArrayList<>();
+        this.inventories = new ArrayList<>();
     }
 
     public Customers() {
@@ -60,10 +63,10 @@ public class Customers {
                 ", name='" + name + '\'' +
                 ", pass='" + pass + '\'' +
                 ", email='" + email + '\'' +
-                ", categories=" + category.getName() +
-                ", userListTrainings=" + userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel).toList() +
-                ", questioner=" + QuestionerDTO.questionerConvertor(questioner)+
-                ", inventories=" + inventories.stream().map(InventoryDTO::convertToModel).toList() +
+                ", categories=" + (category != null ? category.getName() : "null") +
+                ", userListTrainings=" + (userTrainings != null ? userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel).toList().toString() : "null") +
+                ", questioner=" + (questioner != null ? QuestionerDTO.questionerConvertor(questioner).toString() : "null") +
+                ", inventories=" + (inventories != null ? inventories.stream().map(InventoryRegDTO::convertToModel).toList().toString() : "null") +
                 '}';
     }
 }
