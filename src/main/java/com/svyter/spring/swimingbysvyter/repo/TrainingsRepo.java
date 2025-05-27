@@ -20,4 +20,12 @@ public interface TrainingsRepo extends CrudRepository<Trainings, Long> {
             HAVING count(thi.inventory_id) = :countInventoriesId ;""",
             nativeQuery = true)
     List<Trainings> findByInventoriesIdAndComplexityIdAndCountInventoriesId(@Param("inventoriesId") List<Long> inventoriesId, @Param("complexityId") Long complexityId, @Param("countInventoriesId") int countInventoriesId);
+
+    @Query(value = """
+            SELECT t.* FROM trainings t
+            join trainings_has_inventory thi on t.id = thi.trainings_id
+            WHERE t.complexity_id = :complexityId ;""",
+            nativeQuery = true)
+    List<Trainings> findByComplexityIdAndCountInventoriesId(@Param("complexityId") Long complexityId);
+
 }

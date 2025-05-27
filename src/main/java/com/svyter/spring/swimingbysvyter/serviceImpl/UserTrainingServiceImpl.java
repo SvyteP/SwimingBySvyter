@@ -46,7 +46,12 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
         );
         Questioner questioner = customers.getQuestioner();
         List<Long> inventoriesId = customers.getInventories().stream().map(Inventory::getId).collect(Collectors.toCollection(ArrayList::new));
-        List<Trainings> trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId(), inventoriesId.size());
+        List<Trainings> trainings;
+        if (!inventoriesId.isEmpty()) {
+            trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId(), inventoriesId.size());
+        } else {
+            trainings = trainingsRepo.findByComplexityIdAndCountInventoriesId(questioner.getComplexity().getId());
+        }
         int allCountTrain = questioner.getCountWeek() * questioner.getCountTrainOneWeek();
         if (trainings.isEmpty()) {
             throw new NotFoundDataException(messageSource.getMessage("error.training.notfound.for.user", null, Locale.getDefault()));
