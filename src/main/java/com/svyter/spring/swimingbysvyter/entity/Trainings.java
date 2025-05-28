@@ -39,7 +39,7 @@ public class Trainings {
     )
     private List<Inventory> inventories;
 
-    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "trainings")
+    @OneToMany (fetch = FetchType.EAGER, mappedBy = "trainings")
     private List<UserTrainings> userTrainings;
 
     public Trainings() {

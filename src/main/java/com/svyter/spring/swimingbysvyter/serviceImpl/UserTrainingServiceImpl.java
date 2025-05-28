@@ -44,30 +44,34 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
         Customers customers = customersRepo.findById(id).orElseThrow(
                 () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
         );
-        Questioner questioner = customers.getQuestioner();
-        List<Long> inventoriesId = customers.getInventories().stream().map(Inventory::getId).collect(Collectors.toCollection(ArrayList::new));
-        List<Trainings> trainings;
-        if (!inventoriesId.isEmpty()) {
-            trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId(), inventoriesId.size());
-        } else {
-            trainings = trainingsRepo.findByComplexityIdAndCountInventoriesId(questioner.getComplexity().getId());
-        }
-        int allCountTrain = questioner.getCountWeek() * questioner.getCountTrainOneWeek();
-        if (trainings.isEmpty()) {
-            throw new NotFoundDataException(messageSource.getMessage("error.training.notfound.for.user", null, Locale.getDefault()));
-        }
-        List<UserTrainings> userTrainings = new ArrayList<>();
-        for (Trainings train : trainings) {
-            UserTrainings userTraining = new UserTrainings(train, customers, false, false);
-            userTrainings.add(userTraining);
-            train.getUserTrainings().add(userTraining);
-            customers.getUserTrainings().add(userTraining);
+        if (customers.getUserTrainings().stream().allMatch(UserTrainings::isCompleted)) {
+            Questioner questioner = customers.getQuestioner();
+            List<Long> inventoriesId = customers.getInventories().stream().map(Inventory::getId).collect(Collectors.toCollection(ArrayList::new));
+            List<Trainings> trainings;
+            if (!inventoriesId.isEmpty()) {
+                trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId(), inventoriesId.size());
+            } else {
+                trainings = trainingsRepo.findByComplexityIdAndCountInventoriesId(questioner.getComplexity().getId());
+            }
+            int allCountTrain = questioner.getCountWeek() * questioner.getCountTrainOneWeek();
+            if (trainings.isEmpty()) {
+                throw new NotFoundDataException(messageSource.getMessage("error.training.notfound.for.user", null, Locale.getDefault()));
+            }
+            List<UserTrainings> userTrainings = new ArrayList<>();
+            for (Trainings train : trainings) {
+                UserTrainings userTraining = new UserTrainings(train, customers, false, false);
+                userTrainings.add(userTraining);
+                train.getUserTrainings().add(userTraining);
+                customers.getUserTrainings().add(userTraining);
 
-            trainingsRepo.save(train);
-            customersRepo.save(customers);
-            userListTrainingsRepo.save(userTraining);
+                trainingsRepo.save(train);
+                customersRepo.save(customers);
+                userListTrainingsRepo.save(userTraining);
+            }
+            return new ResponseDTO<>(userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel)
+                    .collect(Collectors.toCollection(ArrayList::new)));
         }
-        return new ResponseDTO<>(userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel)
+        return new ResponseDTO<>(customers.getUserTrainings().stream().map(UserListTrainingsGetDTO::convertToModel)
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 
@@ -85,6 +89,17 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
                 () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
         );
         return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomers(customers).stream()
+                .map(UserListTrainingsGetDTO::convertToModel)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getNoCompletedUserTrainings(String token) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+        );
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomersAndCompleted(customers, false).stream()
                 .map(UserListTrainingsGetDTO::convertToModel)
                 .collect(Collectors.toCollection(ArrayList::new)));
     }

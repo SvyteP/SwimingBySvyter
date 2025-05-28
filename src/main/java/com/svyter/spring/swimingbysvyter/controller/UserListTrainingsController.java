@@ -34,6 +34,12 @@ public class UserListTrainingsController {
         return ResponseEntity.ok().body(userListTrainingsService.getUserTrainings(token));
     }
 
+    // Вывод всех активных (не выполненных) тренировок
+    @GetMapping("/all/active/user")
+    public ResponseEntity getAllActiveForCustomers(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(userListTrainingsService.getNoCompletedUserTrainings(token));
+    }
+
     // Вывод конкретной тренировки по id-тренировки
     @GetMapping("/one/{userTrainingId}")
     public ResponseEntity getOneUserListTrainings(@PathVariable Long userTrainingId) {

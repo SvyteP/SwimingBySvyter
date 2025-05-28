@@ -26,5 +26,6 @@ public interface UserListTrainingsService {
 
     ResponseDTO<List<TrainingsDTO>> isComplitedUserTraining(String token);
 
+    ResponseDTO<List<UserListTrainingsGetDTO>> getNoCompletedUserTrainings(String token);
 
 }
