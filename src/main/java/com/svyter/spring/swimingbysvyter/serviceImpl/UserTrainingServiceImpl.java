@@ -71,8 +71,7 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
             return new ResponseDTO<>(userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel)
                     .collect(Collectors.toCollection(ArrayList::new)));
         }
-        return new ResponseDTO<>(customers.getUserTrainings().stream().map(UserListTrainingsGetDTO::convertToModel)
-                .collect(Collectors.toCollection(ArrayList::new)));
+        return getNoCompletedUserTrainings(token);
     }
 
     @Override
