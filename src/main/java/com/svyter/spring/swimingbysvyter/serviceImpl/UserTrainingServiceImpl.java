@@ -71,7 +71,7 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
             return new ResponseDTO<>(userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel)
                     .collect(Collectors.toCollection(ArrayList::new)));
         }
-        return getNoCompletedUserTrainings(token);
+        return getIsCompletedUserTrainings(token, false);
     }
 
     @Override
@@ -93,12 +93,23 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
     }
 
     @Override
-    public ResponseDTO<List<UserListTrainingsGetDTO>> getNoCompletedUserTrainings(String token) {
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getIsCompletedUserTrainings(String token, Boolean isCompleted) {
         Long id = jwtUtils.extractUserId(token);
         Customers customers = customersRepo.findById(id).orElseThrow(
                 () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
         );
-        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomersAndCompleted(customers, false).stream()
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomersAndCompleted(customers, isCompleted).stream()
+                .map(UserListTrainingsGetDTO::convertToModel)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getIsLikeUserTrainings(String token, Boolean isLike) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+        );
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomersAndLikeTrain(customers, isLike).stream()
                 .map(UserListTrainingsGetDTO::convertToModel)
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
@@ -159,7 +170,7 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
     }
 
     @Override
-    public ResponseDTO<List<TrainingsDTO>> isComplitedUserTraining(String token) {
+    public ResponseDTO<List<TrainingsDTO>> isCompletedUserTraining(String token) {
         Long id = jwtUtils.extractUserId(token);
         return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomers(customersRepo.findById(id).orElseThrow(
                         () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))

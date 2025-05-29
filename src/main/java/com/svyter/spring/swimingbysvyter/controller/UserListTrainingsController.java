@@ -34,10 +34,16 @@ public class UserListTrainingsController {
         return ResponseEntity.ok().body(userListTrainingsService.getUserTrainings(token));
     }
 
-    // Вывод всех активных (не выполненных) тренировок
-    @GetMapping("/all/active/user")
-    public ResponseEntity getAllActiveForCustomers(@RequestHeader(value = "Authorization") String token) {
-        return ResponseEntity.ok().body(userListTrainingsService.getNoCompletedUserTrainings(token));
+    // Вывод всех выполненных/не выполненных тренировок
+    @GetMapping("/all/isCompleted")
+    public ResponseEntity getAllIsCompletedForCustomers(@RequestHeader(value = "Authorization") String token, @RequestParam Boolean isCompleted) {
+        return ResponseEntity.ok().body(userListTrainingsService.getIsCompletedUserTrainings(token, isCompleted));
+    }
+
+    // Вывод всех выполненных/не выполненных тренировок
+    @GetMapping("/all/isLiked")
+    public ResponseEntity getAllIsLikeForCustomers(@RequestHeader(value = "Authorization") String token, @RequestParam Boolean isLike) {
+        return ResponseEntity.ok().body(userListTrainingsService.getIsLikeUserTrainings(token, isLike));
     }
 
     // Вывод конкретной тренировки по id-тренировки
@@ -70,7 +76,7 @@ public class UserListTrainingsController {
     @GetMapping("/complete")
     public ResponseEntity complitedTrainingsList(@RequestHeader(value = "Authorization") String token) {
         try {
-            return ResponseEntity.ok().body(userListTrainingsService.isComplitedUserTraining(token));
+            return ResponseEntity.ok().body(userListTrainingsService.isCompletedUserTraining(token));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

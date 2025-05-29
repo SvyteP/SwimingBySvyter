@@ -24,8 +24,10 @@ public interface UserListTrainingsService {
 
     ResponseDTO<List<TrainingsDTO>> isLikeUserTraining(String token);
 
-    ResponseDTO<List<TrainingsDTO>> isComplitedUserTraining(String token);
+    ResponseDTO<List<TrainingsDTO>> isCompletedUserTraining(String token);
 
-    ResponseDTO<List<UserListTrainingsGetDTO>> getNoCompletedUserTrainings(String token);
+    ResponseDTO<List<UserListTrainingsGetDTO>> getIsCompletedUserTrainings(String token, Boolean isCompleted);
+
+    ResponseDTO<List<UserListTrainingsGetDTO>> getIsLikeUserTrainings(String token, Boolean isFavorite);
 
 }

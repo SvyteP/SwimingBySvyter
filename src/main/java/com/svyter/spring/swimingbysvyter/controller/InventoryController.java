@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Validated
 @RequestMapping("/inventory")
@@ -23,7 +25,7 @@ public class InventoryController {
     @PostMapping()
     public ResponseEntity createInventory(@RequestBody InventoryRegDTO inventoryRegDTO) {
         inventoryService.createInventory(inventoryRegDTO);
-        return ResponseEntity.ok().body(HttpStatus.CREATED);
+        return ResponseEntity.ok().body(new ResponseEntity<HttpStatus>(HttpStatus.CREATED));
     }
 
     @GetMapping
@@ -41,20 +43,20 @@ public class InventoryController {
     public ResponseEntity editInventory(@RequestBody InventoryRegDTO inventoryRegDTO
             , @PathVariable Long id) {
         inventoryService.editInventory(inventoryRegDTO, id);
-        return ResponseEntity.ok().body(HttpStatus.OK);
+        return ResponseEntity.ok().body(new ResponseEntity<HttpStatus>(HttpStatus.OK));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delInventory(@PathVariable Long id) {
         inventoryService.delInventory(id);
-        return ResponseEntity.ok().body(HttpStatus.OK);
+        return ResponseEntity.ok().body(new ResponseEntity<HttpStatus>(HttpStatus.OK));
     }
 
     @PutMapping("/set")
-    public ResponseEntity setInventory(@RequestBody InventoriesDTO inventoriesDTO,
+    public ResponseEntity setInventory(@RequestBody List<Long> inventoriesDTO,
                                        @RequestHeader(value = "Authorization") String token) {
         inventoryService.setInventory(inventoriesDTO, token);
-        return ResponseEntity.ok().body(HttpStatus.OK);
+        return ResponseEntity.ok().body(new ResponseEntity<HttpStatus>(HttpStatus.OK));
     }
 
 }

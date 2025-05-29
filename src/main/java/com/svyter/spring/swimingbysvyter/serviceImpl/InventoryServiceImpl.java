@@ -7,7 +7,6 @@ import com.svyter.spring.swimingbysvyter.repo.CustomersRepo;
 import com.svyter.spring.swimingbysvyter.repo.InventoryRepo;
 import com.svyter.spring.swimingbysvyter.entity.Customers;
 import com.svyter.spring.swimingbysvyter.entity.Inventory;
-import com.svyter.spring.swimingbysvyter.dto.InventoriesDTO;
 import com.svyter.spring.swimingbysvyter.dto.InventoryRegDTO;
 import com.svyter.spring.swimingbysvyter.security.JwtUtils;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
@@ -84,13 +83,13 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void setInventory(InventoriesDTO inventoriesDTO, String token) {
+    public void setInventory(List<Long> inventoriesId, String token) {
         long id = jwtUtils.extractUserId(token);
         Customers customers = customersRepo.findById(id).orElseThrow(() -> new NotFoundDataException(
                 String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id)
         ));
         List<Inventory> inventories = new ArrayList<>();
-        inventoryRepo.findAllById(inventoriesDTO.getInventoriesId()).forEach(inventories::add);
+        inventoryRepo.findAllById(inventoriesId).forEach(inventories::add);
         customers.setInventories(inventories);
         customersRepo.save(customers);
     }

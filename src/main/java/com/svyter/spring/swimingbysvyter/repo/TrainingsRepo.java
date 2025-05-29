@@ -24,7 +24,8 @@ public interface TrainingsRepo extends CrudRepository<Trainings, Long> {
     @Query(value = """
             SELECT t.* FROM trainings t
             join trainings_has_inventory thi on t.id = thi.trainings_id
-            WHERE t.complexity_id = :complexityId ;""",
+            WHERE t.complexity_id = :complexityId
+            group by t.id ;""",
             nativeQuery = true)
     List<Trainings> findByComplexityIdAndCountInventoriesId(@Param("complexityId") Long complexityId);
 
