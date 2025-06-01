@@ -1,5 +1,6 @@
 package com.svyter.spring.swimingbysvyter.serviceImpl;
 
+import com.svyter.spring.swimingbysvyter.dto.TrainingsRegDTO;
 import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 import com.svyter.spring.swimingbysvyter.exception.DataAlreadyExistException;
 import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
@@ -33,14 +34,14 @@ public class TrainingsServiceImpl implements TrainingsService {
     }
 
     @Override
-    public void createTrain(TrainingsDTO trainingsDTO) {
+    public void createTrain(TrainingsRegDTO trainingsDTO) {
         if (!trainingsRepo.existsByName(trainingsDTO.getName())) {
             Trainings trainings = new Trainings(trainingsDTO.getName(), trainingsDTO.getWarmUp(),
                     trainingsDTO.getMainTraining(), trainingsDTO.getHitch(),
-                    trainingsDTO.getInventories().stream().map(
-                            inv -> {
+                    trainingsDTO.getInventories().getInventoriesId().stream().map(
+                            id -> {
                                 try {
-                                    return inventoryRepo.findById(inv.id()).orElseThrow();
+                                    return inventoryRepo.findById(id).orElseThrow();
                                 } catch (NoSuchElementException e) {
                                     throw new RuntimeException(e.getMessage());
                                 }

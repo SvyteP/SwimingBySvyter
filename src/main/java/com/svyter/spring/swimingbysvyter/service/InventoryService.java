@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface InventoryService {
     void createInventory(InventoryRegDTO inventoryRegDTO);
-    ResponseDTO<List<InventoryWithStockDTO>> getInventories(String token);
+    ResponseDTO<List<InventoryWithStockDTO>> getInventoriesWithToken(String token);
+    ResponseDTO<List<InventoryWithStockDTO>> getInventories();
     ResponseDTO<InventoryWithStockDTO> getInventory(String token, Long idInv);
     void editInventory(InventoryRegDTO inventoryRegDTO, Long id);
     void delInventory(Long id);

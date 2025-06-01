@@ -8,7 +8,7 @@ import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
 import java.util.List;
 
 public interface UserListTrainingsService {
-    ResponseDTO<List<UserListTrainingsGetDTO>> createUserTraining(String token);
+    ResponseDTO<List<UserListTrainingsGetDTO>> createUserTraining(String token, Boolean isRelevation);
 
     ResponseDTO<UserListTrainingsGetDTO> getOneUserTraining(Long userTrainingId);
 

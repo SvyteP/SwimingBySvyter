@@ -28,6 +28,8 @@ public class SecurityConfig{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/inventory/get").permitAll()
+                        .requestMatchers("/compl/get").permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/**/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

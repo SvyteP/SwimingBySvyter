@@ -5,6 +5,7 @@ import com.svyter.spring.swimingbysvyter.entity.Inventory;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class InventoriesDTO implements DTO {
@@ -17,7 +18,7 @@ public class InventoriesDTO implements DTO {
         this.inventoriesId = inventoriesId;
     }
 
-    public static InventoriesDTO convertToModel(ArrayList<Inventory> inventories)
+    public static InventoriesDTO convertToModel(List<Inventory> inventories)
     {
         ArrayList<Long> inventoriesId = new ArrayList<>();
         inventories.forEach(inventory -> inventoriesId.add(inventory.getId()));

@@ -25,7 +25,7 @@ public class ComplexityController {
         return ResponseEntity.ok().body(HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public ResponseEntity getComplexities() {
         return ResponseEntity.ok().body(complexityService.readComplexities());
     }

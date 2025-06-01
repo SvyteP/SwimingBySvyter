@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import com.svyter.spring.swimingbysvyter.dto.CustomersGetDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity

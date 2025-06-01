@@ -1,6 +1,5 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
-import com.svyter.spring.swimingbysvyter.dto.InventoriesDTO;
 import com.svyter.spring.swimingbysvyter.dto.InventoryRegDTO;
 import com.svyter.spring.swimingbysvyter.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +21,22 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity createInventory(@RequestBody InventoryRegDTO inventoryRegDTO) {
         inventoryService.createInventory(inventoryRegDTO);
         return ResponseEntity.ok().body(new ResponseEntity<HttpStatus>(HttpStatus.CREATED));
     }
 
     @GetMapping
-    public ResponseEntity getInventories(@RequestHeader(value = "Authorization") String token) {
-        return ResponseEntity.ok().body(inventoryService.getInventories(token));
+    public ResponseEntity getInventoriesWithToken(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok().body(inventoryService.getInventoriesWithToken(token));
     }
+
+    @GetMapping("get")
+    public ResponseEntity getInventories(){
+        return ResponseEntity.ok().body(inventoryService.getInventories());
+    }
+
 
     @GetMapping("/{idInv}")
     public ResponseEntity getInventory(@RequestHeader(value = "Authorization") String token,

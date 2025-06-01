@@ -48,12 +48,17 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public ResponseDTO<List<InventoryWithStockDTO>> getInventories(String token) {
+    public ResponseDTO<List<InventoryWithStockDTO>> getInventoriesWithToken(String token) {
         Long id = jwtUtils.extractUserId(token);
         Customers customer = customersRepo.findById(id).orElseThrow( () -> new NotFoundDataException(
                 messageSource.getMessage("error.customer.not.found", new Object[]{"id " + id}, Locale.getDefault())
         ));
         return new  ResponseDTO<>(inventoryRepo.findAll().stream().map(i -> InventoryWithStockDTO.convertToModel(i,customer.getInventories().contains(i))).toList());
+    }
+
+    @Override
+    public ResponseDTO<List<InventoryWithStockDTO>> getInventories() {
+        return new  ResponseDTO<>(inventoryRepo.findAll().stream().map(i -> InventoryWithStockDTO.convertToModel(i,false)).toList());
     }
 
     @Override

@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -27,31 +25,40 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
     private final TrainingsRepo trainingsRepo;
     private final MessageSource messageSource;
     private final JwtUtils jwtUtils;
+    private final UserTrainingsRepo userTrainingsRepo;
 
     @Autowired
-    public UserTrainingServiceImpl(UserTrainingsRepo userListTrainingsRepo, CustomersRepo customersRepo, TrainingsRepo trainingsRepo, MessageSource messageSource, JwtUtils jwtUtils) {
+    public UserTrainingServiceImpl(UserTrainingsRepo userListTrainingsRepo, CustomersRepo customersRepo, TrainingsRepo trainingsRepo, MessageSource messageSource, JwtUtils jwtUtils, UserTrainingsRepo userTrainingsRepo) {
         this.userListTrainingsRepo = userListTrainingsRepo;
         this.customersRepo = customersRepo;
         this.trainingsRepo = trainingsRepo;
         this.messageSource = messageSource;
         this.jwtUtils = jwtUtils;
-
+        this.userTrainingsRepo = userTrainingsRepo;
     }
 
     @Override
-    public ResponseDTO<List<UserListTrainingsGetDTO>> createUserTraining(String token) {
+    public ResponseDTO<List<UserListTrainingsGetDTO>> createUserTraining(String token, Boolean isRelevation) {
         Long id = jwtUtils.extractUserId(token);
         Customers customers = customersRepo.findById(id).orElseThrow(
                 () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
         );
+
+        if (isRelevation) {
+            if (checkRelevanceTraining(customers.getUserTrainings(), customers)) {
+                removeNoCompletedTrainings(customers.getUserTrainings());
+            }
+        }
+
         if (customers.getUserTrainings().stream().allMatch(UserTrainings::isCompleted)) {
             Questioner questioner = customers.getQuestioner();
             List<Long> inventoriesId = customers.getInventories().stream().map(Inventory::getId).collect(Collectors.toCollection(ArrayList::new));
             List<Trainings> trainings;
+
             if (!inventoriesId.isEmpty()) {
-                trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId(), inventoriesId.size());
+                trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId());
             } else {
-                trainings = trainingsRepo.findByComplexityIdAndCountInventoriesId(questioner.getComplexity().getId());
+                trainings = trainingsRepo.findByComplexityIdAndNullInventoriesId(questioner.getComplexity().getId());
             }
             int allCountTrain = questioner.getCountWeek() * questioner.getCountTrainOneWeek();
             if (trainings.isEmpty()) {
@@ -72,6 +79,43 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
                     .collect(Collectors.toCollection(ArrayList::new)));
         }
         return getIsCompletedUserTrainings(token, false);
+    }
+
+    private boolean checkRelevanceTraining(List<UserTrainings> userTrainings, Customers customer) {
+        return userTrainings.stream().anyMatch(ut ->
+                !ut.getTrainings().getComplexity().getId().equals(customer.getQuestioner().getComplexity().getId())) ||
+                userTrainings.stream().anyMatch(ut -> {
+                    Set<Long> trainingInventoryIds = ut.getTrainings().getInventories().stream()
+                            .map(Inventory::getId)
+                            .collect(Collectors.toSet());
+
+                    Set<Long> customerInventoryIds = customer.getInventories().stream()
+                            .map(Inventory::getId)
+                            .collect(Collectors.toSet());
+
+                    return !trainingInventoryIds.equals(customerInventoryIds);
+                });
+    }
+
+    private void removeNoCompletedTrainings(List<UserTrainings> userTrainings) {
+        List<UserTrainings> toDelete = new ArrayList<>();
+
+        for (UserTrainings ut : userTrainings) {
+            if (!ut.isCompleted()) {
+                toDelete.add(ut);
+            }
+        }
+
+        for (UserTrainings ut : toDelete) {
+            ut.getTrainings().getUserTrainings().remove(ut);
+            ut.getCustomers().getUserTrainings().remove(ut);
+
+            customersRepo.save(ut.getCustomers());
+            trainingsRepo.save(ut.getTrainings());
+            userTrainingsRepo.delete(ut);
+        }
+
+        userTrainings.removeAll(toDelete);
     }
 
     @Override

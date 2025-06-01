@@ -18,8 +18,9 @@ public class UserListTrainingsController {
 
     // Подбор тренировок
     @PostMapping
-    public ResponseEntity generateTrainings(@RequestHeader(value = "Authorization") String token) {
-        return ResponseEntity.ok().body(userListTrainingsService.createUserTraining(token));
+    public ResponseEntity generateTrainings(@RequestHeader(value = "Authorization") String token,
+                                            @RequestParam boolean isRelevation) {
+        return ResponseEntity.ok().body(userListTrainingsService.createUserTraining(token, isRelevation));
     }
 
     // Вывод списка всех тренировок, которые были подобраны пользователям

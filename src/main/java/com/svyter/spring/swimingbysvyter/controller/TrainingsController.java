@@ -1,6 +1,7 @@
 package com.svyter.spring.swimingbysvyter.controller;
 
 import com.svyter.spring.swimingbysvyter.dto.TrainingsDTO;
+import com.svyter.spring.swimingbysvyter.dto.TrainingsRegDTO;
 import com.svyter.spring.swimingbysvyter.service.TrainingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class TrainingsController {
     }
 
     @PostMapping
-    public ResponseEntity createTrainings(@RequestBody TrainingsDTO trainingsDTO) {
-        trainingsService.createTrain(trainingsDTO);
+    public ResponseEntity createTrainings(@RequestBody TrainingsRegDTO trainingsRegDTO) {
+        trainingsService.createTrain(trainingsRegDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
