@@ -30,4 +30,5 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
+### Gitlab - py py py ###
 .vscode/
