@@ -1,0 +1,224 @@
+package com.svyter.spring.swimingbysvyter.serviceImpl;
+
+import com.svyter.spring.swimingbysvyter.dto.base.ResponseDTO;
+import com.svyter.spring.swimingbysvyter.exception.NotFoundDataException;
+import com.svyter.spring.swimingbysvyter.repo.CustomersRepo;
+import com.svyter.spring.swimingbysvyter.repo.TrainingsRepo;
+import com.svyter.spring.swimingbysvyter.repo.UserTrainingsRepo;
+import com.svyter.spring.swimingbysvyter.entity.*;
+import com.svyter.spring.swimingbysvyter.dto.TrainingsDTO;
+import com.svyter.spring.swimingbysvyter.dto.UserListTrainingsGetDTO;
+import com.svyter.spring.swimingbysvyter.security.JwtUtils;
+import com.svyter.spring.swimingbysvyter.service.UserListTrainingsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@Service
+public class UserTrainingServiceImpl implements UserListTrainingsService {
+    private final UserTrainingsRepo userListTrainingsRepo;
+    private final CustomersRepo customersRepo;
+    private final TrainingsRepo trainingsRepo;
+    private final MessageSource messageSource;
+    private final JwtUtils jwtUtils;
+    private final UserTrainingsRepo userTrainingsRepo;
+
+    @Autowired
+    public UserTrainingServiceImpl(UserTrainingsRepo userListTrainingsRepo, CustomersRepo customersRepo, TrainingsRepo trainingsRepo, MessageSource messageSource, JwtUtils jwtUtils, UserTrainingsRepo userTrainingsRepo) {
+        this.userListTrainingsRepo = userListTrainingsRepo;
+        this.customersRepo = customersRepo;
+        this.trainingsRepo = trainingsRepo;
+        this.messageSource = messageSource;
+        this.jwtUtils = jwtUtils;
+        this.userTrainingsRepo = userTrainingsRepo;
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> createUserTraining(String token, Boolean isRelevation) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+        );
+
+        if (isRelevation) {
+            if (checkRelevanceTraining(customers.getUserTrainings(), customers)) {
+                removeNoCompletedTrainings(customers.getUserTrainings());
+            }
+        }
+
+        if (customers.getUserTrainings().stream().allMatch(UserTrainings::isCompleted)) {
+            Questioner questioner = customers.getQuestioner();
+            List<Long> inventoriesId = customers.getInventories().stream().map(Inventory::getId).collect(Collectors.toCollection(ArrayList::new));
+            List<Trainings> trainings;
+
+            if (!inventoriesId.isEmpty()) {
+                trainings = trainingsRepo.findByInventoriesIdAndComplexityIdAndCountInventoriesId(inventoriesId, questioner.getComplexity().getId());
+            } else {
+                trainings = trainingsRepo.findByComplexityIdAndNullInventoriesId(questioner.getComplexity().getId());
+            }
+            int allCountTrain = questioner.getCountWeek() * questioner.getCountTrainOneWeek();
+            if (trainings.isEmpty()) {
+                throw new NotFoundDataException(messageSource.getMessage("error.training.notfound.for.user", null, Locale.getDefault()));
+            }
+            List<UserTrainings> userTrainings = new ArrayList<>();
+            for (Trainings train : trainings) {
+                UserTrainings userTraining = new UserTrainings(train, customers, false, false);
+                userTrainings.add(userTraining);
+                train.getUserTrainings().add(userTraining);
+                customers.getUserTrainings().add(userTraining);
+
+                trainingsRepo.save(train);
+                customersRepo.save(customers);
+                userListTrainingsRepo.save(userTraining);
+            }
+            return new ResponseDTO<>(userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel)
+                    .collect(Collectors.toCollection(ArrayList::new)));
+        }
+        return getIsCompletedUserTrainings(token, false);
+    }
+
+    private boolean checkRelevanceTraining(List<UserTrainings> userTrainings, Customers customer) {
+        return userTrainings.stream().anyMatch(ut ->
+                !ut.getTrainings().getComplexity().getId().equals(customer.getQuestioner().getComplexity().getId())) ||
+                userTrainings.stream().anyMatch(ut -> {
+                    Set<Long> trainingInventoryIds = ut.getTrainings().getInventories().stream()
+                            .map(Inventory::getId)
+                            .collect(Collectors.toSet());
+
+                    Set<Long> customerInventoryIds = customer.getInventories().stream()
+                            .map(Inventory::getId)
+                            .collect(Collectors.toSet());
+
+                    return !trainingInventoryIds.equals(customerInventoryIds);
+                });
+    }
+
+    private void removeNoCompletedTrainings(List<UserTrainings> userTrainings) {
+        List<UserTrainings> toDelete = new ArrayList<>();
+
+        for (UserTrainings ut : userTrainings) {
+            if (!ut.isCompleted()) {
+                toDelete.add(ut);
+            }
+        }
+
+        for (UserTrainings ut : toDelete) {
+            ut.getTrainings().getUserTrainings().remove(ut);
+            ut.getCustomers().getUserTrainings().remove(ut);
+
+            customersRepo.save(ut.getCustomers());
+            trainingsRepo.save(ut.getTrainings());
+            userTrainingsRepo.delete(ut);
+        }
+
+        userTrainings.removeAll(toDelete);
+    }
+
+    @Override
+    public ResponseDTO<UserListTrainingsGetDTO> getOneUserTraining(Long userTrainingId) {
+        return new ResponseDTO<>(UserListTrainingsGetDTO.convertToModel(userListTrainingsRepo.findById(userTrainingId).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.user.training.notfound ", null, Locale.getDefault()), "id " + userTrainingId))
+        )));
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getUserTrainings(String token) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+        );
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomers(customers).stream()
+                .map(UserListTrainingsGetDTO::convertToModel)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getIsCompletedUserTrainings(String token, Boolean isCompleted) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+        );
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomersAndCompleted(customers, isCompleted).stream()
+                .map(UserListTrainingsGetDTO::convertToModel)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getIsLikeUserTrainings(String token, Boolean isLike) {
+        Long id = jwtUtils.extractUserId(token);
+        Customers customers = customersRepo.findById(id).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+        );
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomersAndLikeTrain(customers, isLike).stream()
+                .map(UserListTrainingsGetDTO::convertToModel)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public ResponseDTO<List<UserListTrainingsGetDTO>> getAllUserTrainings() {
+        Iterable<UserTrainings> iterable = userListTrainingsRepo.findAll();
+        return new ResponseDTO<>(StreamSupport.stream(iterable.spliterator(), false)
+                .map(UserListTrainingsGetDTO::convertToModel)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public void isLikeTraining(Long userTrainingId, boolean isLike) {
+        UserTrainings userListTrainings = userListTrainingsRepo.findById(userTrainingId).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.user.training.notfound ", null, Locale.getDefault()), "userTrainingId " + userTrainingId))
+        );
+        userListTrainings.setLikeTrain(isLike);
+        userListTrainingsRepo.save(userListTrainings);
+    }
+
+    @Override
+    public void isCompliteTraining(Long userTrainingId, boolean isCompl) {
+        UserTrainings userListTrainings = userListTrainingsRepo.findById(userTrainingId).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.user.training.notfound ", null, Locale.getDefault()), "userTrainingId " + userTrainingId))
+        );
+        userListTrainings.setCompleted(isCompl);
+        userListTrainingsRepo.save(userListTrainings);
+    }
+
+    @Override
+    public void deleteUserTraining(Long userTrainingId) {
+        UserTrainings userTrainings = userListTrainingsRepo.findById(userTrainingId).orElseThrow();
+        Customers customers = customersRepo.findById(userTrainings.getCustomers().getId()).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + userTrainings.getCustomers().getId()))
+        );
+        Trainings trainings = trainingsRepo.findById(userTrainings.getTrainings().getId()).orElseThrow(
+                () -> new NotFoundDataException(String.format(messageSource.getMessage("error.training.notfound ", null, Locale.getDefault()), "id " + userTrainings.getTrainings().getId()))
+
+        );
+
+        customers.getUserTrainings().remove(userTrainings);
+        trainings.getUserTrainings().remove(userTrainings);
+
+        customersRepo.save(customers);
+        trainingsRepo.save(trainings);
+        userListTrainingsRepo.deleteById(userTrainingId);
+    }
+
+    /*Подумать над типизацией метода и слиянием isLike и isComplete*/
+    @Override
+    public ResponseDTO<List<TrainingsDTO>> isLikeUserTraining(String token) {
+        Long id = jwtUtils.extractUserId(token);
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomers(customersRepo.findById(id).orElseThrow(
+                        () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+                )).
+                stream().filter(UserTrainings::isLikeTrain).map(UserTrainings::getTrainings).map(TrainingsDTO::convertToModel).toList());
+    }
+
+    @Override
+    public ResponseDTO<List<TrainingsDTO>> isCompletedUserTraining(String token) {
+        Long id = jwtUtils.extractUserId(token);
+        return new ResponseDTO<>(userListTrainingsRepo.findAllByCustomers(customersRepo.findById(id).orElseThrow(
+                        () -> new NotFoundDataException(String.format(messageSource.getMessage("error.customer.notfound", null, Locale.getDefault()), "id " + id))
+                ))
+                .stream().filter(UserTrainings::isCompleted).map(UserTrainings::getTrainings).map(TrainingsDTO::convertToModel).toList());
+    }
+}
