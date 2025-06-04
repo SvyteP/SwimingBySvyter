@@ -64,17 +64,23 @@ public class UserTrainingServiceImpl implements UserListTrainingsService {
             if (trainings.isEmpty()) {
                 throw new NotFoundDataException(messageSource.getMessage("error.training.notfound.for.user", null, Locale.getDefault()));
             }
-            List<UserTrainings> userTrainings = new ArrayList<>();
-            for (Trainings train : trainings) {
-                UserTrainings userTraining = new UserTrainings(train, customers, false, false);
-                userTrainings.add(userTraining);
-                train.getUserTrainings().add(userTraining);
-                customers.getUserTrainings().add(userTraining);
 
-                trainingsRepo.save(train);
-                customersRepo.save(customers);
-                userListTrainingsRepo.save(userTraining);
+            List<UserTrainings> userTrainings = new ArrayList<>();
+            while (allCountTrain > 0) {
+                for (Trainings train : trainings) {
+                    UserTrainings userTraining = new UserTrainings(train, customers, false, false);
+                    userTrainings.add(userTraining);
+                    train.getUserTrainings().add(userTraining);
+                    customers.getUserTrainings().add(userTraining);
+
+                    trainingsRepo.save(train);
+                    customersRepo.save(customers);
+                    userListTrainingsRepo.save(userTraining);
+                    allCountTrain--;
+                }
             }
+
+
             return new ResponseDTO<>(userTrainings.stream().map(UserListTrainingsGetDTO::convertToModel)
                     .collect(Collectors.toCollection(ArrayList::new)));
         }
